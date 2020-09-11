@@ -1,10 +1,11 @@
 import React from 'react';
+import DataGeneratorPage from './features/dataGenerator/containers/DataGeneratorPage';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <p>Fake Data Generator</p>
+      <DataGeneratorPage />
     </div>
   );
 }
