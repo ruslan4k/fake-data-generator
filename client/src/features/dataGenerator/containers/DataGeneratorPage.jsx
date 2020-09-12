@@ -4,37 +4,79 @@ import isEqual from 'lodash/isEqual';
 import DataRow from '../components/DataRow';
 import InputField from '../../../baseComponents/TextField';
 import { FIRST_NAME, LAST_NAME, EMAIL } from '../../../constants/dataTypes';
+import OutputBox from '../components/OutputBox';
+import lastNamesArray from '../../../constants/data/lastNames';
+import firstNamesArray from '../../../constants/data/firstNames';
+import emailDomainsArray from '../../../constants/data/emailDomains';
 
 const DEFAULT_ROWS_NUMBER = 100;
 
+const generateRandomInteger = (maxValue) => Math.floor(Math.random() * maxValue);
+const generateFirstName = () => firstNamesArray[generateRandomInteger(firstNamesArray.length)];
+const generateLastName = () => lastNamesArray[generateRandomInteger(lastNamesArray.length)];
+const generateRandomEmailDomain = () => emailDomainsArray[generateRandomInteger(emailDomainsArray.length)];
+
+const generateData = (dataType) => {
+  switch (dataType) {
+    case FIRST_NAME:
+      return generateFirstName();
+    case LAST_NAME:
+      return generateLastName();
+    case EMAIL: {
+      const domain = generateRandomEmailDomain();
+      const valueBeforeDomain = `${generateFirstName().toLocaleLowerCase()}.${generateLastName().toLocaleLowerCase()}${Math.floor(
+        Math.random() * 10000,
+      )}`;
+      const email = `${valueBeforeDomain}${domain}`;
+      return email;
+    }
+    default:
+      return '';
+  }
+};
+
 function DataGeneratorPage() {
-  const initialRowsState = [
+  const initialColumnsState = [
     { columnName: 'firstName', columnType: FIRST_NAME },
     { columnName: 'lastName', columnType: LAST_NAME },
     { columnName: 'email', columnType: EMAIL },
   ];
-  const [dataRows, setDataRows] = useState(initialRowsState);
-  const [rowsToGenerateNumber, setRowsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
-  const isDefaultState = isEqual(initialRowsState, dataRows) && isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
+  const [columns, setColumns] = useState(initialColumnsState);
+  const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
+  const [generatedDataRows, setGeneratedDataRows] = useState([]);
+  const isDefaultState = isEqual(initialColumnsState, columns) && isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
   const handleChangeDataRow = (event, index, field) => {
     const newValue = event.target.value;
-    const updatedDataRows = dataRows.slice();
-    updatedDataRows[index][field] = newValue;
-    setDataRows(updatedDataRows);
+    const updatedDataColumns = columns.slice();
+    updatedDataColumns[index][field] = newValue;
+    setColumns(updatedDataColumns);
   };
 
   const handleDeleteDataRow = (indexOfRowToDelete) => {
-    const updatedDataRows = dataRows.filter((row, index) => index !== indexOfRowToDelete);
-    setDataRows(updatedDataRows);
+    const updatedDataColumns = columns.filter((row, index) => index !== indexOfRowToDelete);
+    setColumns(updatedDataColumns);
   };
 
   const handleResetToDefault = () => {
-    setDataRows(initialRowsState);
-    setRowsToGenerateNumber(DEFAULT_ROWS_NUMBER);
+    setColumns(initialColumnsState);
+    setColumnsToGenerateNumber(DEFAULT_ROWS_NUMBER);
   };
 
-  const handleRowsToGenerateNumber = (e) => {
-    setRowsToGenerateNumber(e.target.value);
+  const handleColumnsToGenerateNumber = (e) => {
+    setColumnsToGenerateNumber(e.target.value);
+  };
+
+  const handleGenerateData = () => {
+    const result = [];
+    for (let index = 0; index < rowsToGenerateNumber; index += 1) {
+      const generatedRow = {};
+      columns.forEach((columnItem) => {
+        const { columnName, columnType } = columnItem;
+        generatedRow[columnName] = generateData(columnType);
+      });
+      result.push(generatedRow);
+    }
+    setGeneratedDataRows(result);
   };
 
   return (
@@ -43,7 +85,7 @@ function DataGeneratorPage() {
       <div className="flex flex-col items-center">
         <div>
           <div>
-            {dataRows.map(({ columnName, columnType }, index) => (
+            {columns.map(({ columnName, columnType }, index) => (
               <DataRow
                 key={columnType}
                 columnName={columnName}
@@ -57,11 +99,11 @@ function DataGeneratorPage() {
           <div className="flex flex-col items-start">
             <div className="mr-auto my-16">
               <InputField
-                label="Rows to Generate Number"
+                label="Columns to Generate Number"
                 type="number"
                 variant="outlined"
                 value={rowsToGenerateNumber}
-                onChange={handleRowsToGenerateNumber}
+                onChange={handleColumnsToGenerateNumber}
               />
             </div>
             {!isDefaultState && (
@@ -71,12 +113,12 @@ function DataGeneratorPage() {
                 </Button>
               </div>
             )}
-            <Button variant="contained" color="primary" onClick={handleResetToDefault}>
+            <Button variant="contained" color="primary" onClick={handleGenerateData}>
               Generate Data
             </Button>
           </div>
-
         </div>
+        <OutputBox generatedDataRows={generatedDataRows} />
       </div>
     </div>
   );
