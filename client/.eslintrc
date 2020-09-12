@@ -1,3 +1,12 @@
 {
-  "extends": "airbnb"
+  "extends": "airbnb",
+  "rules": {
+    "max-len": [
+      "error",
+      {
+        "code": 130,
+        "tabWidth": 2
+      }
+    ]
+  }
 }
