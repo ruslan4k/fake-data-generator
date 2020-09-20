@@ -4,16 +4,16 @@ import Button from '@material-ui/core/Button';
 import isEqual from 'lodash/isEqual';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 import cn from 'classnames';
 import { func } from 'prop-types';
 import { CSVLink } from 'react-csv';
-import DataRow from '../components/DataRow';
 import InputField from '../../../baseComponents/TextField';
 import {
   FIRST_NAME, LAST_NAME, EMAIL, UUID,
 } from '../../../constants/dataTypes';
 import OutputBox from '../components/OutputBox';
+import DataColumns from '../components/DataColumns';
 import lastNamesArray from '../../../constants/data/lastNames';
 import firstNamesArray from '../../../constants/data/firstNames';
 import emailDomainsArray from '../../../constants/data/emailDomains';
@@ -21,7 +21,7 @@ import { SNACKBAR_TYPES } from '../../../constants/snackbarConstants';
 import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
 
 const useStyles = makeStyles({
-  container: { minWidth: 300 },
+  container: { minWidth: 300, maxWidth: '100%' },
 });
 
 const DEFAULT_ROWS_NUMBER = 100;
@@ -77,17 +77,6 @@ function DataGeneratorPage({ handleShowMessage }) {
     initialColumnsState.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
     columns.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
   ) && isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
-  const handleChangeDataRow = (event, index, field) => {
-    const newValue = event.target.value;
-    const updatedDataColumns = columns.slice();
-    updatedDataColumns[index][field] = newValue;
-    setColumns(updatedDataColumns);
-  };
-
-  const handleDeleteDataRow = (indexOfRowToDelete) => {
-    const updatedDataColumns = columns.filter((row, index) => index !== indexOfRowToDelete);
-    setColumns(updatedDataColumns);
-  };
 
   const handleResetToDefault = () => {
     setColumns(initialColumnsState);
@@ -126,23 +115,11 @@ function DataGeneratorPage({ handleShowMessage }) {
   };
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
   return (
-    <div className="py-24">
+    <div className="p-24">
       <p className="mb-16">Fake Data Generator</p>
       <div className="flex flex-col items-center">
         <div className={cn('flex flex-col', container)}>
-          <div>
-            {columns.map(({ columnName, columnType, id }, index) => (
-              <DataRow
-                key={id}
-                columnName={columnName}
-                columnType={columnType}
-                handleChangeDataRowColumnName={(event) => handleChangeDataRow(event, index, 'columnName')}
-                handleChangeDataRowColumnType={(event) => handleChangeDataRow(event, index, 'columnType')}
-                handleDeleteDataRow={() => handleDeleteDataRow(index)}
-                isDuplicatedColumnName={Boolean(duplicatedColumnNames[columnName])}
-              />
-            ))}
-          </div>
+          <DataColumns setColumns={setColumns} columns={columns} duplicatedColumnNames={duplicatedColumnNames} />
           <div className="flex justify-between my-8">
             <InputField
               label="Columns to Generate Number"

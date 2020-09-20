@@ -1,8 +1,12 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import { string, func, bool } from 'prop-types';
+import {
+  string, func, bool, object,
+} from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DragIndicator from '@material-ui/icons/DragIndicatorSharp';
 import { makeStyles } from '@material-ui/core';
 import InputField from '../../../baseComponents/TextField';
 import dataTypes from '../../../constants/dataTypes';
@@ -20,13 +24,14 @@ const useStyles = makeStyles({
   },
 });
 
-function DataRow({
+function DataColumnItem({
   columnName,
   columnType,
   handleChangeDataRowColumnName,
   handleChangeDataRowColumnType,
   handleDeleteDataRow,
   isDuplicatedColumnName,
+  dragHandleProps,
 }) {
   const { dataTypeSelectStyles, columnNameFieldStyles } = useStyles();
   const helperText = isDuplicatedColumnName ? 'Duplicated Column Name' : '';
@@ -62,17 +67,25 @@ function DataRow({
       <IconButton className="self-start ml-16" aria-label="delete" onClick={handleDeleteDataRow}>
         <DeleteIcon />
       </IconButton>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <div {...dragHandleProps}>
+        <IconButton disableRipple disableFocusRipple style={{ pointerEvents: 'none' }}>
+          <DragIndicator />
+        </IconButton>
+      </div>
+
     </div>
   );
 }
 
-DataRow.propTypes = {
+DataColumnItem.propTypes = {
   columnName: string.isRequired,
   columnType: string.isRequired,
   handleChangeDataRowColumnName: func.isRequired,
   handleChangeDataRowColumnType: func.isRequired,
   handleDeleteDataRow: func.isRequired,
   isDuplicatedColumnName: bool.isRequired,
+  dragHandleProps: object.isRequired,
 };
 
-export default DataRow;
+export default DataColumnItem;

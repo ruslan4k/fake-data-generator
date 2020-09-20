@@ -31,7 +31,7 @@ function OutputBox({ generatedDataRows, columns }) {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
+    setRowsPerPage(event.target.value);
     setPage(0);
   };
 
@@ -40,7 +40,7 @@ function OutputBox({ generatedDataRows, columns }) {
   const currentTableRows = generatedDataRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 max-w-full">
       {isResult && (
         <Paper elevation={3} classes={{ root: classes.root }}>
           <TableContainer className={classes.container}>
