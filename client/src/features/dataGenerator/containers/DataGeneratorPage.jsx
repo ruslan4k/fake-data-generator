@@ -60,13 +60,15 @@ function DataGeneratorPage({ handleShowMessage }) {
     { columnName: 'email', columnType: EMAIL, id: uuid() },
   ];
   const [columns, setColumns] = useState(initialColumnsState);
+  const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
+  const [generatedData, setGeneratedDataRows] = useState({ columns: initialColumnsState, rows: [] });
   const duplicatedColumnNames = {};
   const columnNamesCounter = {};
+
   columns.forEach(({ columnName }) => {
     columnNamesCounter[columnName] = columnNamesCounter[columnName] ? (duplicatedColumnNames[columnName] = true) : 1;
   });
-  const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
-  const [generatedDataRows, setGeneratedDataRows] = useState([]);
+
   const isDefaultState = isEqual(
     initialColumnsState.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
     columns.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
@@ -99,7 +101,7 @@ function DataGeneratorPage({ handleShowMessage }) {
   };
 
   const handleGenerateData = () => {
-    const result = [];
+    const rows = [];
     for (let index = 0; index < rowsToGenerateNumber; index += 1) {
       const generatedRow = {};
       columns.forEach((columnItem) => {
@@ -108,9 +110,9 @@ function DataGeneratorPage({ handleShowMessage }) {
         // eslint-disable-next-line no-underscore-dangle
         generatedRow[DEFAULT_KEY_NAME] = uuid();
       });
-      result.push(generatedRow);
+      rows.push(generatedRow);
     }
-    setGeneratedDataRows(result);
+    setGeneratedDataRows({ rows, columns });
     handleShowMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS });
   };
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
@@ -163,7 +165,7 @@ function DataGeneratorPage({ handleShowMessage }) {
             </Button>
           </div>
         </div>
-        <OutputBox generatedDataRows={generatedDataRows} />
+        <OutputBox generatedDataRows={generatedData.rows} columns={generatedData.columns} />
       </div>
     </div>
 
