@@ -7,6 +7,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { uuid } from 'uuidv4';
 import cn from 'classnames';
 import { func } from 'prop-types';
+import { CSVLink } from 'react-csv';
 import DataRow from '../components/DataRow';
 import InputField from '../../../baseComponents/TextField';
 import {
@@ -41,7 +42,7 @@ const generateData = (dataType) => {
       const valueBeforeDomain = `${generateFirstName().toLocaleLowerCase()}.${generateLastName().toLocaleLowerCase()}${Math.floor(
         Math.random() * 10000,
       )}`;
-      const email = `${valueBeforeDomain}${domain}`;
+      const email = `${valueBeforeDomain}@${domain}`;
       return email;
     }
     case UUID: {
@@ -61,7 +62,8 @@ function DataGeneratorPage({ handleShowMessage }) {
   ];
   const [columns, setColumns] = useState(initialColumnsState);
   const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
-  const [generatedData, setGeneratedDataRows] = useState({ columns: initialColumnsState, rows: [] });
+  const initialGeneratedDataState = { columns: initialColumnsState, rows: [], csvRows: [] };
+  const [generatedData, setGeneratedDataRows] = useState(initialGeneratedDataState);
   const duplicatedColumnNames = {};
   const columnNamesCounter = {};
 
@@ -69,7 +71,9 @@ function DataGeneratorPage({ handleShowMessage }) {
     columnNamesCounter[columnName] = columnNamesCounter[columnName] ? (duplicatedColumnNames[columnName] = true) : 1;
   });
 
-  const isDefaultState = isEqual(
+  const isData = Boolean(generatedData.rows.length);
+
+  const isDefaultState = !isData && isEqual(
     initialColumnsState.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
     columns.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
   ) && isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
@@ -88,6 +92,7 @@ function DataGeneratorPage({ handleShowMessage }) {
   const handleResetToDefault = () => {
     setColumns(initialColumnsState);
     setColumnsToGenerateNumber(DEFAULT_ROWS_NUMBER);
+    setGeneratedDataRows(initialGeneratedDataState);
     handleShowMessage({ message: 'Settings successfully reset to default!', type: SNACKBAR_TYPES.SUCCESS });
   };
 
@@ -96,7 +101,9 @@ function DataGeneratorPage({ handleShowMessage }) {
   };
 
   const handleAddColumn = () => {
-    const updatedDataColumns = [...columns, { columnName: 'firstName', columnType: FIRST_NAME, id: uuid() }];
+    const columnsNumber = columns.length;
+    const newColumnName = `columnName${columnsNumber + 1}`;
+    const updatedDataColumns = [...columns, { columnName: newColumnName, columnType: FIRST_NAME, id: uuid() }];
     setColumns(updatedDataColumns);
   };
 
@@ -112,12 +119,14 @@ function DataGeneratorPage({ handleShowMessage }) {
       });
       rows.push(generatedRow);
     }
-    setGeneratedDataRows({ rows, columns });
+    const csvRows = rows.map(({ [DEFAULT_KEY_NAME]: defaultKeyName, ...otherFields }) => otherFields);
+
+    setGeneratedDataRows({ rows, columns, csvRows });
     handleShowMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS });
   };
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
   return (
-    <div>
+    <div className="py-24">
       <p className="mb-16">Fake Data Generator</p>
       <div className="flex flex-col items-center">
         <div className={cn('flex flex-col', container)}>
@@ -149,20 +158,33 @@ function DataGeneratorPage({ handleShowMessage }) {
 
           <div className="flex flex-col items-start">
             {!isDefaultState && (
-            <div className="mb-20">
+            <div className="mb-8">
               <Button variant="contained" onClick={handleResetToDefault}>
                 Reset To Default
               </Button>
             </div>
             )}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleGenerateData}
-              disabled={!isValidForm}
-            >
-              Generate Data
-            </Button>
+            <div className="mt-16 flex justify-between w-full">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleGenerateData}
+                disabled={!isValidForm}
+              >
+                Generate Data
+              </Button>
+              {isData && (
+              <CSVLink data={generatedData.csvRows} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  disabled={!isValidForm}
+                >
+                  Download CSV
+                </Button>
+              </CSVLink>
+              )}
+            </div>
           </div>
         </div>
         <OutputBox generatedDataRows={generatedData.rows} columns={generatedData.columns} />
