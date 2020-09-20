@@ -1,5 +1,5 @@
 import React from 'react';
-import { string, func } from 'prop-types';
+import { string, func, bool } from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -21,9 +21,15 @@ const useStyles = makeStyles({
 });
 
 function DataRow({
-  columnName, columnType, handleChangeDataRowColumnName, handleChangeDataRowColumnType, handleDeleteDataRow,
+  columnName,
+  columnType,
+  handleChangeDataRowColumnName,
+  handleChangeDataRowColumnType,
+  handleDeleteDataRow,
+  isDuplicatedColumnName,
 }) {
   const { dataTypeSelectStyles, columnNameFieldStyles } = useStyles();
+  const helperText = isDuplicatedColumnName ? 'Duplicated Column Name' : '';
   return (
     <div className="mb-10 flex flex-row">
       <div className="mr-16">
@@ -31,8 +37,10 @@ function DataRow({
           className={columnNameFieldStyles}
           label="Column Name"
           variant="outlined"
+          error={isDuplicatedColumnName}
           value={columnName}
           onChange={handleChangeDataRowColumnName}
+          helperText={helperText}
         />
       </div>
       <div className="mr-16">
@@ -64,6 +72,7 @@ DataRow.propTypes = {
   handleChangeDataRowColumnName: func.isRequired,
   handleChangeDataRowColumnType: func.isRequired,
   handleDeleteDataRow: func.isRequired,
+  isDuplicatedColumnName: bool.isRequired,
 };
 
 export default DataRow;

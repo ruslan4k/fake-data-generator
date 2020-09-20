@@ -5,12 +5,15 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "classnames": "^2.2.6",
     "lodash": "^4.17.20",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
-    "tailwindcss": "^1.8.8"
+    "tailwindcss": "^1.8.8",
+    "uuidv4": "^6.2.3"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,6 +1,7 @@
 export const LAST_NAME = 'lastName';
 export const FIRST_NAME = 'firstName';
 export const EMAIL = 'email';
+export const UUID = 'uuid';
 
 const dataTypes = [{
   type: FIRST_NAME,
@@ -11,6 +12,9 @@ const dataTypes = [{
 }, {
   type: EMAIL,
   label: 'Email',
+}, {
+  type: UUID,
+  label: 'UUID',
 }];
 
 export default dataTypes;

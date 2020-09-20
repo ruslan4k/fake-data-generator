@@ -1,13 +1,27 @@
 import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import isEqual from 'lodash/isEqual';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { uuid } from 'uuidv4';
+import cn from 'classnames';
+import { func } from 'prop-types';
 import DataRow from '../components/DataRow';
 import InputField from '../../../baseComponents/TextField';
-import { FIRST_NAME, LAST_NAME, EMAIL } from '../../../constants/dataTypes';
+import {
+  FIRST_NAME, LAST_NAME, EMAIL, UUID,
+} from '../../../constants/dataTypes';
 import OutputBox from '../components/OutputBox';
 import lastNamesArray from '../../../constants/data/lastNames';
 import firstNamesArray from '../../../constants/data/firstNames';
 import emailDomainsArray from '../../../constants/data/emailDomains';
+import { SNACKBAR_TYPES } from '../../../constants/snackbarConstants';
+import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
+
+const useStyles = makeStyles({
+  container: { minWidth: 300 },
+});
 
 const DEFAULT_ROWS_NUMBER = 100;
 
@@ -30,21 +44,33 @@ const generateData = (dataType) => {
       const email = `${valueBeforeDomain}${domain}`;
       return email;
     }
+    case UUID: {
+      return uuid();
+    }
     default:
       return '';
   }
 };
 
-function DataGeneratorPage() {
+function DataGeneratorPage({ handleShowMessage }) {
+  const { container } = useStyles();
   const initialColumnsState = [
-    { columnName: 'firstName', columnType: FIRST_NAME },
-    { columnName: 'lastName', columnType: LAST_NAME },
-    { columnName: 'email', columnType: EMAIL },
+    { columnName: 'firstName', columnType: FIRST_NAME, id: uuid() },
+    { columnName: 'lastName', columnType: LAST_NAME, id: uuid() },
+    { columnName: 'email', columnType: EMAIL, id: uuid() },
   ];
   const [columns, setColumns] = useState(initialColumnsState);
+  const duplicatedColumnNames = {};
+  const columnNamesCounter = {};
+  columns.forEach(({ columnName }) => {
+    columnNamesCounter[columnName] = columnNamesCounter[columnName] ? (duplicatedColumnNames[columnName] = true) : 1;
+  });
   const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
   const [generatedDataRows, setGeneratedDataRows] = useState([]);
-  const isDefaultState = isEqual(initialColumnsState, columns) && isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
+  const isDefaultState = isEqual(
+    initialColumnsState.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
+    columns.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
+  ) && isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
   const handleChangeDataRow = (event, index, field) => {
     const newValue = event.target.value;
     const updatedDataColumns = columns.slice();
@@ -60,10 +86,16 @@ function DataGeneratorPage() {
   const handleResetToDefault = () => {
     setColumns(initialColumnsState);
     setColumnsToGenerateNumber(DEFAULT_ROWS_NUMBER);
+    handleShowMessage({ message: 'Settings successfully reset to default!', type: SNACKBAR_TYPES.SUCCESS });
   };
 
   const handleColumnsToGenerateNumber = (e) => {
     setColumnsToGenerateNumber(e.target.value);
+  };
+
+  const handleAddColumn = () => {
+    const updatedDataColumns = [...columns, { columnName: 'firstName', columnType: FIRST_NAME, id: uuid() }];
+    setColumns(updatedDataColumns);
   };
 
   const handleGenerateData = () => {
@@ -73,47 +105,60 @@ function DataGeneratorPage() {
       columns.forEach((columnItem) => {
         const { columnName, columnType } = columnItem;
         generatedRow[columnName] = generateData(columnType);
+        // eslint-disable-next-line no-underscore-dangle
+        generatedRow[DEFAULT_KEY_NAME] = uuid();
       });
       result.push(generatedRow);
     }
     setGeneratedDataRows(result);
+    handleShowMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS });
   };
-
+  const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
   return (
     <div>
       <p className="mb-16">Fake Data Generator</p>
       <div className="flex flex-col items-center">
-        <div>
+        <div className={cn('flex flex-col', container)}>
           <div>
-            {columns.map(({ columnName, columnType }, index) => (
+            {columns.map(({ columnName, columnType, id }, index) => (
               <DataRow
-                key={columnType}
+                key={id}
                 columnName={columnName}
                 columnType={columnType}
                 handleChangeDataRowColumnName={(event) => handleChangeDataRow(event, index, 'columnName')}
                 handleChangeDataRowColumnType={(event) => handleChangeDataRow(event, index, 'columnType')}
                 handleDeleteDataRow={() => handleDeleteDataRow(index)}
+                isDuplicatedColumnName={Boolean(duplicatedColumnNames[columnName])}
               />
             ))}
           </div>
+          <div className="flex justify-between my-8">
+            <InputField
+              label="Columns to Generate Number"
+              type="number"
+              variant="outlined"
+              value={rowsToGenerateNumber}
+              onChange={handleColumnsToGenerateNumber}
+            />
+            <Fab size="small" className="self-end" color="primary" aria-label="add" onClick={handleAddColumn}>
+              <AddIcon />
+            </Fab>
+          </div>
+
           <div className="flex flex-col items-start">
-            <div className="mr-auto my-16">
-              <InputField
-                label="Columns to Generate Number"
-                type="number"
-                variant="outlined"
-                value={rowsToGenerateNumber}
-                onChange={handleColumnsToGenerateNumber}
-              />
-            </div>
             {!isDefaultState && (
-              <div className="mb-20">
-                <Button variant="contained" onClick={handleResetToDefault}>
-                  Reset To Default
-                </Button>
-              </div>
+            <div className="mb-20">
+              <Button variant="contained" onClick={handleResetToDefault}>
+                Reset To Default
+              </Button>
+            </div>
             )}
-            <Button variant="contained" color="primary" onClick={handleGenerateData}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleGenerateData}
+              disabled={!isValidForm}
+            >
               Generate Data
             </Button>
           </div>
@@ -121,7 +166,12 @@ function DataGeneratorPage() {
         <OutputBox generatedDataRows={generatedDataRows} />
       </div>
     </div>
+
   );
 }
+
+DataGeneratorPage.propTypes = {
+  handleShowMessage: func.isRequired,
+};
 
 export default DataGeneratorPage;
