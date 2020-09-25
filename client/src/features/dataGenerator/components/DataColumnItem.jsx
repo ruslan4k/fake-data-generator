@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DragIndicator from '@material-ui/icons/DragIndicatorSharp';
 import { makeStyles } from '@material-ui/core';
-import InputField from '../../../baseComponents/TextField';
+import TextField from '@material-ui/core/TextField';
 import dataTypes from '../../../constants/dataTypes';
 
 const useStyles = makeStyles({
@@ -38,7 +38,7 @@ function DataColumnItem({
   return (
     <div className="mb-10 flex flex-row">
       <div className="mr-16">
-        <InputField
+        <TextField
           className={columnNameFieldStyles}
           label="Column Name"
           variant="outlined"
@@ -49,7 +49,7 @@ function DataColumnItem({
         />
       </div>
       <div className="mr-16">
-        <InputField
+        <TextField
           className={dataTypeSelectStyles}
           select
           label="Select"
@@ -62,7 +62,7 @@ function DataColumnItem({
               {option.label}
             </MenuItem>
           ))}
-        </InputField>
+        </TextField>
       </div>
       <IconButton className="self-start ml-16" aria-label="delete" onClick={handleDeleteDataRow}>
         <DeleteIcon />

@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
 import DataGeneratorPage from './features/dataGenerator/containers/DataGeneratorPage';
+import SignIn from './features/authentication/SignIn';
+import SignUp from './features/authentication/SignUp';
+import Header from './features/layout/Header';
 import SnackbarComponent, { SnackbarContext } from './baseComponents/Snackbar';
 import './App.css';
 
@@ -29,14 +37,27 @@ function App() {
         type={snackbarType}
       />
       <div className="App">
-        <SnackbarContext.Provider
-          value={{
-            handleShowMessage,
-            handleCloseMessage,
-          }}
-        >
-          <DataGeneratorPage handleShowMessage={handleShowMessage} />
-        </SnackbarContext.Provider>
+        <Router>
+          <SnackbarContext.Provider
+            value={{
+              handleShowMessage,
+              handleCloseMessage,
+            }}
+          >
+            <Header />
+            <Switch>
+              <Route exact path="/">
+                <DataGeneratorPage handleShowMessage={handleShowMessage} />
+              </Route>
+              <Route exact path="/signin">
+                <SignIn />
+              </Route>
+              <Route exact path="/signup">
+                <SignUp />
+              </Route>
+            </Switch>
+          </SnackbarContext.Provider>
+        </Router>
       </div>
     </>
   );

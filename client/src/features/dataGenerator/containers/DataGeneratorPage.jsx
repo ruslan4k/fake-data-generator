@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import isEqual from 'lodash/isEqual';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -8,7 +9,6 @@ import { v4 as uuid } from 'uuid';
 import cn from 'classnames';
 import { func } from 'prop-types';
 import { CSVLink } from 'react-csv';
-import InputField from '../../../baseComponents/TextField';
 import {
   FIRST_NAME, LAST_NAME, EMAIL, UUID,
 } from '../../../constants/dataTypes';
@@ -121,7 +121,7 @@ function DataGeneratorPage({ handleShowMessage }) {
         <div className={cn('flex flex-col', container)}>
           <DataColumns setColumns={setColumns} columns={columns} duplicatedColumnNames={duplicatedColumnNames} />
           <div className="flex justify-between my-8">
-            <InputField
+            <TextField
               label="Columns to Generate Number"
               type="number"
               variant="outlined"
