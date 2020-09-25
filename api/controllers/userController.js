@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
 const UserService = require('../services/userService');
 
@@ -18,7 +19,6 @@ const createUser = async (req, res) => {
 const getUserByEmailAndPassword = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('getUserByEmailAndPassword -> req.body', req.body);
     if (!email || !password) return res.sendStatus(400);
     const user = await UserService.getUserByEmailAndPassword(email, password);
     return res.send(user);
