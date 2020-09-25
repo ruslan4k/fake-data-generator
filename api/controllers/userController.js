@@ -15,6 +15,22 @@ const createUser = async (req, res) => {
   }
 };
 
+const getUserByEmailAndPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log('getUserByEmailAndPassword -> req.body', req.body);
+    if (!email || !password) return res.sendStatus(400);
+    const user = await UserService.getUserByEmailAndPassword(email, password);
+    return res.send(user);
+  } catch (error) {
+    console.error('getUserByEmailAndPassword -> error', {
+      error, body: req.body, query: req.query, params: req.params,
+    });
+    return res.sendStatus(500);
+  }
+};
+
 module.exports = {
   createUser,
+  getUserByEmailAndPassword,
 };
