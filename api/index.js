@@ -1,7 +1,12 @@
 /* eslint-disable no-console */
 require('dotenv').config();
+require('./services/userService');
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const router = require('./routes');
+
 const { NODE_PORT, MONGODB_URI } = require('./constants/envVariables');
 
 (async () => {
@@ -9,6 +14,7 @@ const { NODE_PORT, MONGODB_URI } = require('./constants/envVariables');
   await mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
   });
   console.log('Successfully connected to MongoDB instance');
 })();
@@ -16,10 +22,9 @@ const { NODE_PORT, MONGODB_URI } = require('./constants/envVariables');
 const app = express();
 const PORT = NODE_PORT || 3600;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(router);
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`Listening at http://localhost:${PORT}`);
