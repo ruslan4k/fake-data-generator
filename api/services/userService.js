@@ -9,6 +9,7 @@ const createUser = async ({ name, email, password }) => {
 
 const getUserByEmailAndPassword = async (email, password) => {
   const user = await User.findOne({ email });
+  if (!user) return null;
   const hashedPassword = user.password;
   const isValid = compareHashAndValue(password, hashedPassword);
   if (isValid) return user;
