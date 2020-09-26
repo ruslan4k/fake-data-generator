@@ -9,6 +9,9 @@ const cors = require('cors');
 const session = require('./middlewares/session');
 const router = require('./routes');
 const { APP_URL, ENV } = require('./constants/envVariables');
+const errorHandler = require('./middlewares/errorHandler');
+
+const NotFoundError = require('./constants/errors/notFoundError');
 
 const { NODE_PORT, MONGODB_URI, SESSION_KEY } = require('./constants/envVariables');
 
@@ -36,6 +39,10 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(session);
 app.use(router);
+app.all('*', () => {
+  throw new NotFoundError();
+});
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
 });
