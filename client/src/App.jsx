@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
 } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import DataGeneratorPage from './features/dataGenerator/containers/DataGeneratorPage';
 import SignIn from './features/authentication/SignIn';
 import SignUp from './features/authentication/SignUp';
 import Header from './features/layout/Header';
 import SnackbarComponent, { SnackbarContext } from './baseComponents/Snackbar';
+import configureStore from './state/configureStore';
+import history from './helpers/history';
 import './App.css';
 
 function App() {
   const [open, setOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarType, setSnackbarType] = useState('');
+  const initialState = {};
+  const store = configureStore(initialState, history);
   const handleShowMessage = ({ message, type }) => {
     setOpen(true);
     if (message) setSnackbarMessage(message);
@@ -27,17 +32,18 @@ function App() {
     }
     setOpen(false);
   };
+
   return (
-    <>
-      <SnackbarComponent
-        handleShowMessage={handleShowMessage}
-        handleCloseMessage={handleCloseMessage}
-        open={open}
-        message={snackbarMessage}
-        type={snackbarType}
-      />
-      <div className="App">
-        <Router>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <SnackbarComponent
+          handleShowMessage={handleShowMessage}
+          handleCloseMessage={handleCloseMessage}
+          open={open}
+          message={snackbarMessage}
+          type={snackbarType}
+        />
+        <div className="App">
           <SnackbarContext.Provider
             value={{
               handleShowMessage,
@@ -57,9 +63,9 @@ function App() {
               </Route>
             </Switch>
           </SnackbarContext.Provider>
-        </Router>
-      </div>
-    </>
+        </div>
+      </ConnectedRouter>
+    </Provider>
   );
 }
 

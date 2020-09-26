@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import request from '../../helpers/requestHelper';
+import { useDispatch } from 'react-redux';
+import * as UserActions from '../../state/user/userActions';
 import useHandleTextInput from '../../customHooks/useHandleTextInput';
 
 function SignIn() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(UserActions.getUserRequest());
+  }, [dispatch]);
   const { value: password, handleChangeValue: handleChangePassword } = useHandleTextInput();
   const { value: email, handleChangeValue: handleChangeEmail } = useHandleTextInput();
   const handleSignIn = async () => {
-    const user = await request('/users/login', 'post', { email, password });
-    alert(JSON.stringify(user));
+    dispatch(UserActions.loginRequest(email, password));
   };
   return (
     <div className="inline-flex flex-col">
