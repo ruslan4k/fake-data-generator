@@ -1,41 +1,37 @@
-import React, { createContext } from 'react';
+import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { bool, func, string } from 'prop-types';
-import { SNACKBAR_TYPES } from '../constants/snackbarConstants';
-
-export const SnackbarContext = createContext();
-// https://kentcdodds.com/blog/how-to-use-react-context-effectively
+import { useDispatch, useSelector } from 'react-redux';
+import * as GlobalSelectors from '../state/global/globalSelectors';
+import * as GlobalActions from '../state/global/globalActions';
 
 function Alert(props) {
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function SnackbarComponent({
-  handleCloseMessage, open, message, type,
-}) {
+function SnackbarComponent() {
+  const dispatch = useDispatch();
+  const handleCloseMessage = (event, reason) => {
+    if (reason === 'clickaway') {
+      dispatch(GlobalActions.hideSnackbarMessage());
+    }
+    dispatch(GlobalActions.hideSnackbarMessage());
+  };
+  const { message, type } = useSelector((state) => GlobalSelectors.selectSnackbarMessage(state));
+  const isMessage = Boolean(message);
+
   return (
     <>
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleCloseMessage}>
-        <Alert classes={{ root: 'flex items-center' }} onClose={handleCloseMessage} severity={type}>
-          {message}
-        </Alert>
+      <Snackbar open={isMessage} autoHideDuration={3000} onClose={handleCloseMessage}>
+        {isMessage && (
+          <Alert classes={{ root: 'flex items-center' }} onClose={handleCloseMessage} severity={type}>
+            {message}
+          </Alert>
+        )}
       </Snackbar>
     </>
   );
 }
-
-SnackbarComponent.propTypes = {
-  handleCloseMessage: func.isRequired,
-  open: bool.isRequired,
-  message: string,
-  type: string,
-};
-
-SnackbarComponent.defaultProps = {
-  message: '',
-  type: SNACKBAR_TYPES.ERROR,
-};
 
 export default SnackbarComponent;
