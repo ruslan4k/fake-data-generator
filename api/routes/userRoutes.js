@@ -14,6 +14,7 @@ router.route('/')
     body('email')
       .not()
       .isEmpty()
+      .isEmail()
       .withMessage('Email must be provided'),
     body('password')
       .not()
@@ -26,11 +27,18 @@ router.route('/login')
     body('email')
       .not()
       .isEmpty()
-      .withMessage('Email must be provided'),
+      .isEmail()
+      .withMessage('Not valid email'),
     body('password')
       .not()
       .isEmpty()
       .withMessage('Password must be provided'),
   ], validationMiddleware, userController.getUserByEmailAndPassword);
+
+router.route('/logout')
+  .get(userController.logout);
+
+router.route('/me')
+  .get(userController.getCurrentUser);
 
 module.exports = router;

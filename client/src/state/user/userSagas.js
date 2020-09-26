@@ -5,11 +5,13 @@ import {
 import * as UserActions from './userActions';
 import * as UserRequests from './userRequests';
 import * as UserConstants from './userConstants';
+import * as GlobalActions from '../global/globalActions';
+import history from '../../helpers/history';
 
 export function* getUser() {
   try {
-    const user = yield call(UserRequests.getUser);
-    yield put(UserActions.getUserSuccess(user));
+    const { user } = yield call(UserRequests.getUser);
+    if (user) yield put(UserActions.getUserSuccess(user));
   } catch (err) {
     yield put(UserActions.getUserFailure());
   }
@@ -18,15 +20,44 @@ export function* getUser() {
 export function* login({ email: providedEmail, password }) {
   try {
     const user = yield call(UserRequests.login, providedEmail, password);
-    const { email, name } = user;
-    yield put(UserActions.loginSuccess(email, name));
+    yield put(UserActions.loginSuccess(user));
+    yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully signed in!', type: 'success' }));
+    history.push('/');
   } catch (err) {
-    console.error('login -> err', err);
+    const { message } = err.response.data.errors[0];
+    yield put(GlobalActions.showSnackbarMessage({ message, type: 'error' }));
     yield put(UserActions.loginFailure());
+  }
+}
+
+export function* register({ email: providedEmail, password, name }) {
+  try {
+    const user = yield call(UserRequests.register, providedEmail, password, name);
+    yield put(UserActions.registerSuccess(user));
+    yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully signed up!', type: 'success' }));
+    history.push('/');
+  } catch (err) {
+    const { message } = err.response.data.errors[0];
+    yield put(GlobalActions.showSnackbarMessage({ message, type: 'error' }));
+    yield put(UserActions.registerFailure());
+  }
+}
+
+export function* logout() {
+  try {
+    const user = yield call(UserRequests.logout);
+    yield put(UserActions.logoutSuccess(user));
+    yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully logged out!', type: 'success' }));
+  } catch (err) {
+    const { message } = err.response.data.errors[0];
+    yield put(GlobalActions.showSnackbarMessage({ message, type: 'error' }));
+    yield put(UserActions.logoutFailure());
   }
 }
 
 export default function* () {
   yield takeEvery(UserConstants.GET_USER_REQUEST, getUser);
   yield takeEvery(UserConstants.LOGIN_REQUEST, login);
+  yield takeEvery(UserConstants.REGISTER_REQUEST, register);
+  yield takeEvery(UserConstants.LOGOUT_REQUEST, logout);
 }

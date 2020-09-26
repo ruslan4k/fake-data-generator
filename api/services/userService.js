@@ -4,7 +4,7 @@ const { hashValue, compareHashAndValue } = require('../helpers/encryptionHelpers
 const createUser = async ({ name, email, password }) => {
   const hashedPassword = await hashValue(password);
   const user = new User({ name, email, password: hashedPassword });
-  await user.save();
+  return user.save();
 };
 
 const getUserByEmailAndPassword = async (email, password) => {
