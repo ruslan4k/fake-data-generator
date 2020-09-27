@@ -14,6 +14,7 @@ import {
 // The initial state of the App
 export const initialState = {
   user: null,
+  isLoggedIn: false,
   loadingUser: false,
   loadingLogin: false,
   loadingRegister: false,
@@ -22,12 +23,14 @@ export const initialState = {
 
 /* eslint-disable default-case, no-param-reassign */
 const userReducer = (state = initialState, action) => produce(state, (draft) => {
+  const setLoggedInState = () => { draft.isLoggedIn = Boolean(action.user); };
   switch (action.type) {
     case GET_USER_REQUEST:
       draft.loadingUser = true;
       break;
     case GET_USER_SUCCESS:
       draft.user = action.user;
+      setLoggedInState();
       draft.loadingUser = false;
       draft.isUserFetched = true;
       break;
@@ -39,6 +42,7 @@ const userReducer = (state = initialState, action) => produce(state, (draft) => 
       break;
     case LOGIN_SUCCESS:
       draft.user = action.user;
+      setLoggedInState();
       draft.loadingLogin = false;
       break;
     case LOGIN_FAILURE:
@@ -49,6 +53,7 @@ const userReducer = (state = initialState, action) => produce(state, (draft) => 
       break;
     case REGISTER_SUCCESS:
       draft.user = action.user;
+      setLoggedInState();
       draft.loadingRegister = false;
       break;
     case REGISTER_FAILURE:
@@ -56,6 +61,7 @@ const userReducer = (state = initialState, action) => produce(state, (draft) => 
       break;
     case LOGOUT_SUCCESS:
       draft.user = null;
+      setLoggedInState();
       break;
   }
 });

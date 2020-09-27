@@ -8,7 +8,6 @@ const createUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const user = await UserService.createUser({ name, email, password });
-    console.log('createUser -> user', user);
     req.session.user = user;
     return res.send({ user });
   } catch (err) {
