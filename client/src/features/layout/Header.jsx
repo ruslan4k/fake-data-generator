@@ -12,15 +12,25 @@ function Header() {
     { path: '/', label: 'Home' },
     { path: '/history', label: 'History' },
   ];
-  const pathNames = tabs.map((tab) => tab.path);
-  const [value, setValue] = React.useState(0);
+  const [tabIndex, setTabIndex] = React.useState(false);
   const user = useSelector((state) => UserSelectors.selectUser(state));
+  const isLoggedIn = useSelector((state) => UserSelectors.selectLoggedInStatus(state));
   const location = useLocation();
   const history = useHistory();
   const { pathname } = location;
   useEffect(() => {
-    const isActiveTab = pathNames.includes(pathname);
-    if (!isActiveTab) setValue(false);
+    let activeTabIndex = null;
+    const activeTab = tabs.find((tab, index) => {
+      const isMatched = tab.path === pathname;
+      if (isMatched) activeTabIndex = index;
+      return tab.path === pathname;
+    });
+
+    if (!activeTab) {
+      setTabIndex(false);
+    } else {
+      setTabIndex(activeTabIndex);
+    }
   }, [pathname]);
   const isUserFetched = useSelector((state) => UserSelectors.selectUsersFetched(state));
 
@@ -34,20 +44,24 @@ function Header() {
     const tab = tabs[newValue];
     const { path } = tab;
     history.push(path);
-    setValue(newValue);
   };
   return (
     <div className="w-full flex justify-between py-16 px-16">
-      <Tabs value={value} indicatorColor="primary" textColor="primary" onChange={handleChange} aria-label="disabled tabs example">
+      <Tabs
+        value={tabIndex}
+        indicatorColor="primary"
+        textColor="primary"
+        onChange={handleChange}
+        aria-label="disabled tabs example"
+      >
         {tabs.map(({ label }) => (
           <Tab key={label} label={label} />
         ))}
       </Tabs>
       {isUserFetched && (
         <>
-          {!user ? (
+          {!isLoggedIn ? (
             <div className="flex ml-auto">
-
               {pathname !== '/signin' && (
                 <div className="ml-16">
                   <Link to="/signin">
@@ -58,13 +72,13 @@ function Header() {
                 </div>
               )}
               {pathname !== '/signup' && (
-              <div className="ml-16">
-                <Link to="/signup">
-                  <Button variant="contained" color="secondary">
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>
+                <div className="ml-16">
+                  <Link to="/signup">
+                    <Button variant="contained" color="secondary">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
           ) : (

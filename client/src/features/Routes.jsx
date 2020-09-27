@@ -8,6 +8,7 @@ import DataGeneratorPage from './dataGenerator/containers/DataGeneratorPage';
 import SignIn from './authentication/SignIn';
 import SignUp from './authentication/SignUp';
 import Header from './layout/Header';
+import HistoryPage from './history/containers/HistoryPage';
 import SnackbarComponent from '../baseComponents/Snackbar';
 import { getUserRequest } from '../state/user/userActions';
 
@@ -30,6 +31,9 @@ function Routes() {
         </Route>
         <Route exact path="/signup">
           <SignUp />
+        </Route>
+        <Route exact path="/history">
+          <HistoryPage />
         </Route>
       </Switch>
     </>

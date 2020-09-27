@@ -28,11 +28,9 @@ const getUserByEmailAndPassword = async (req, res, next) => {
 
 const getCurrentUser = async (req, res, next) => {
   try {
-    const { user } = req.session;
+    const { user } = req;
     if (!user) return res.send({ user: null });
-    const id = user._id;
-    const dbUser = await UserService.getUserById(id);
-    return res.send({ user: dbUser });
+    return res.send({ user });
   } catch (err) {
     return next(err);
   }
