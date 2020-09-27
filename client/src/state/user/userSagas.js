@@ -11,7 +11,7 @@ import history from '../../helpers/history';
 export function* getUser() {
   try {
     const { user } = yield call(UserRequests.getUser);
-    if (user) yield put(UserActions.getUserSuccess(user));
+    yield put(UserActions.getUserSuccess(user));
   } catch (err) {
     yield put(UserActions.getUserFailure());
   }
@@ -19,7 +19,7 @@ export function* getUser() {
 
 export function* login({ email: providedEmail, password }) {
   try {
-    const user = yield call(UserRequests.login, providedEmail, password);
+    const { user } = yield call(UserRequests.login, providedEmail, password);
     yield put(UserActions.loginSuccess(user));
     yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully signed in!', type: 'success' }));
     history.push('/');
@@ -32,7 +32,7 @@ export function* login({ email: providedEmail, password }) {
 
 export function* register({ email: providedEmail, password, name }) {
   try {
-    const user = yield call(UserRequests.register, providedEmail, password, name);
+    const { user } = yield call(UserRequests.register, providedEmail, password, name);
     yield put(UserActions.registerSuccess(user));
     yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully signed up!', type: 'success' }));
     history.push('/');

@@ -15,7 +15,8 @@ function Routes() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserRequest());
-  }, []);
+  }, [dispatch]);
+
   return (
     <>
       <SnackbarComponent />
