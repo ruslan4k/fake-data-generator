@@ -1,14 +1,15 @@
-const User = require('../schemas/userSchema');
+const UserRepository = require('../repositories/userRepositories');
 const { hashValue, compareHashAndValue } = require('../helpers/encryptionHelpers');
+
+const getUserById = async (id) => UserRepository.getUserById(id);
 
 const createUser = async ({ name, email, password }) => {
   const hashedPassword = await hashValue(password);
-  const user = new User({ name, email, password: hashedPassword });
-  return user.save();
+  return UserRepository.createUser({ name, email, password: hashedPassword });
 };
 
 const getUserByEmailAndPassword = async (email, password) => {
-  const user = await User.findOne({ email });
+  const user = await UserRepository.getUserByEmail(email);
   if (!user) return null;
   const hashedPassword = user.password;
   const isValid = compareHashAndValue(password, hashedPassword);
@@ -19,4 +20,5 @@ const getUserByEmailAndPassword = async (email, password) => {
 module.exports = {
   createUser,
   getUserByEmailAndPassword,
+  getUserById,
 };

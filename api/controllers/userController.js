@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
 const NotFoundError = require('../constants/errors/notFoundError');
-const User = require('../schemas/userSchema');
 const UserService = require('../services/userService');
 
 const createUser = async (req, res, next) => {
@@ -32,7 +31,7 @@ const getCurrentUser = async (req, res, next) => {
     const { user } = req.session;
     if (!user) return res.send({ user: null });
     const id = user._id;
-    const dbUser = await User.findById(id);
+    const dbUser = await UserService.getUserById(id);
     return res.send({ user: dbUser });
   } catch (err) {
     return next(err);
