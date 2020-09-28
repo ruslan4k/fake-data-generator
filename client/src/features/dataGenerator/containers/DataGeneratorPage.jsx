@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 import cn from 'classnames';
 import { CSVLink } from 'react-csv';
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import {
   FIRST_NAME, LAST_NAME, EMAIL, UUID,
 } from '../../../constants/dataTypes';
@@ -57,6 +58,8 @@ const generateData = (dataType) => {
 
 function DataGeneratorPage() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const { state: locationState } = location;
   const { container } = useStyles();
   const initialColumnsState = [
     { columnName: 'firstName', columnType: FIRST_NAME, id: uuid() },
@@ -69,6 +72,16 @@ function DataGeneratorPage() {
   const [generatedData, setGeneratedDataRows] = useState(initialGeneratedDataState);
   const duplicatedColumnNames = {};
   const columnNamesCounter = {};
+
+  useEffect(() => {
+    const generationEvent = locationState?.generationEvent;
+    if (generationEvent) {
+      const { rowsNumber, columns: locationStateColumns } = generationEvent;
+      const newColumns = locationStateColumns.map((column) => ({ ...column, id: uuid() }));
+      setColumnsToGenerateNumber(rowsNumber);
+      setColumns(newColumns);
+    }
+  }, [locationState]);
 
   columns.forEach(({ columnName }) => {
     columnNamesCounter[columnName] = columnNamesCounter[columnName] ? (duplicatedColumnNames[columnName] = true) : 1;
@@ -116,11 +129,11 @@ function DataGeneratorPage() {
       rows.push(generatedRow);
     }
     const csvRows = rows.map(({ [DEFAULT_KEY_NAME]: defaultKeyName, ...otherFields }) => otherFields);
-    const setup = {
+    const generationEvent = {
       columns,
       rowsToGenerateNumber,
     };
-    dispatch(DataGenerationActions.saveDataGenerationEventRequest(setup));
+    dispatch(DataGenerationActions.saveDataGenerationEventRequest(generationEvent));
     setGeneratedDataRows({ rows, columns, csvRows });
     dispatch(GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }));
   };
