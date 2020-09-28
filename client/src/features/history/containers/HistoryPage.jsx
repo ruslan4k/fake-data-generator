@@ -7,7 +7,9 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import dayjs from 'dayjs';
 import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
 import * as DataGenerationSelectors from '../../../state/dataGeneration/dataGenerationSelectors';
 
@@ -27,20 +29,47 @@ function HistoryPage() {
   return (
     <div className={cn(container, 'flex-inline flex-col m-auto')}>
       {
-        dataGenerationEventsHistory.map((event) => (
-          <Accordion key={event.createdAt}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-            >
-              <Typography>{event.createdAt}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                More Data Generation Details
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))
+        dataGenerationEventsHistory.length > 0
+          ? dataGenerationEventsHistory.map((event) => (
+            <Accordion key={event.createdAt}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <div className="flex justify-around w-full">
+                  <div className="flex flex-col items-start">
+                    <Typography>{dayjs(event.createdAt).format('HH:mm:ss MMMM DD, YYYY')}</Typography>
+                    <Typography className="flex-none">
+                      Rows Number:
+                      {' '}
+                      {event.rowsNumber}
+                    </Typography>
+                  </div>
+                  <Button variant="contained" color="secondary">Generate Again</Button>
+                </div>
+
+              </AccordionSummary>
+              <AccordionDetails>
+                <div className="flex flex-col items-start">
+                  {event.columns.map((columnItem) => (
+                    <div className="flex">
+                      <Typography key={`${columnItem.columnType}${columnItem.columnName}`}>
+                        Column Name:
+                        {' '}
+                        {columnItem.columnType}
+                      </Typography>
+                      <Typography key={`${columnItem.columnType}${columnItem.columnName}`}>
+                        Column Type:
+                        {' '}
+                        {columnItem.columnType}
+                      </Typography>
+
+                    </div>
+                  ))}
+                </div>
+
+              </AccordionDetails>
+            </Accordion>
+          )) : <Typography>No history events</Typography>
       }
 
     </div>
