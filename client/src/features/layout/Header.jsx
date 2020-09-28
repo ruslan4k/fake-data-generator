@@ -15,6 +15,7 @@ function Header() {
   const [tabIndex, setTabIndex] = React.useState(false);
   const user = useSelector((state) => UserSelectors.selectUser(state));
   const isLoggedIn = useSelector((state) => UserSelectors.selectLoggedInStatus(state));
+  const isUserFetched = useSelector((state) => UserSelectors.selectUsersFetched(state));
   const location = useLocation();
   const history = useHistory();
   const { pathname } = location;
@@ -31,8 +32,7 @@ function Header() {
     } else {
       setTabIndex(activeTabIndex);
     }
-  }, [pathname]);
-  const isUserFetched = useSelector((state) => UserSelectors.selectUsersFetched(state));
+  }, [pathname, tabs]);
 
   const dispatch = useDispatch();
 

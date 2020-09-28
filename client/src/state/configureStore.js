@@ -6,6 +6,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
 import userSagas from './user/userSagas';
+import dataGenerationSagas from './dataGeneration/dataGenerationSagas';
+
 import createReducer from './rootReducer';
 
 export default function configureStore(initialState = {}, history) {
@@ -35,6 +37,7 @@ export default function configureStore(initialState = {}, history) {
 
   function* sagas() {
     yield all([fork(userSagas)]);
+    yield all([fork(dataGenerationSagas)]);
   }
 
   sagaMiddleware.run(sagas);

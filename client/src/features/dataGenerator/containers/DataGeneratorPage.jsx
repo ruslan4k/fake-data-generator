@@ -20,6 +20,7 @@ import emailDomainsArray from '../../../constants/data/emailDomains';
 import { SNACKBAR_TYPES } from '../../../constants/snackbarConstants';
 import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
 import * as GlobalActions from '../../../state/global/globalActions';
+import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
 
 const useStyles = makeStyles({
   container: { minWidth: 300, maxWidth: '100%' },
@@ -115,11 +116,13 @@ function DataGeneratorPage() {
       rows.push(generatedRow);
     }
     const csvRows = rows.map(({ [DEFAULT_KEY_NAME]: defaultKeyName, ...otherFields }) => otherFields);
-
+    const setup = {
+      columns,
+      rowsToGenerateNumber,
+    };
+    dispatch(DataGenerationActions.saveDataGenerationEventRequest(setup));
     setGeneratedDataRows({ rows, columns, csvRows });
-    dispatch(
-      GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }),
-    );
+    dispatch(GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }));
   };
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
   return (

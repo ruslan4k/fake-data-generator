@@ -12,6 +12,7 @@ const authenticate = async (
     const dbUser = await UserService.getUserById(id);
     if (!dbUser) req.session.user = null;
     req.user = dbUser;
+    req.userId = dbUser._id;
     return next();
   } catch (err) {
     return next(err);

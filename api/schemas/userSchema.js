@@ -4,13 +4,14 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
-    name: String,
+    name: { type: String, required: true },
     email: {
       type: String,
       index: true,
       unique: true,
+      required: true,
     },
-    password: String,
+    password: { type: String, required: true },
   },
   { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } },
 );

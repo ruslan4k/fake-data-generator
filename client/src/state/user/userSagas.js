@@ -8,12 +8,16 @@ import * as UserConstants from './userConstants';
 import * as GlobalActions from '../global/globalActions';
 import { SNACKBAR_TYPES } from '../../constants/snackbarConstants';
 import history from '../../helpers/history';
+import { formatErrorMessage } from '../../helpers/errorsHelpers';
 
 export function* getUser() {
   try {
     const { user } = yield call(UserRequests.getUser);
     yield put(UserActions.getUserSuccess(user));
   } catch (err) {
+    console.log('function*getUser -> err', err);
+    const message = formatErrorMessage(err);
+    yield put(GlobalActions.showSnackbarMessage({ message, type: SNACKBAR_TYPES.ERROR }));
     yield put(UserActions.getUserFailure());
   }
 }
@@ -25,7 +29,8 @@ export function* login({ email: providedEmail, password }) {
     yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully signed in!', type: SNACKBAR_TYPES.SUCCESS }));
     history.push('/');
   } catch (err) {
-    const { message } = err.response.data.errors[0];
+    console.log('function*login -> err', err);
+    const message = formatErrorMessage(err);
     yield put(GlobalActions.showSnackbarMessage({ message, type: SNACKBAR_TYPES.ERROR }));
     yield put(UserActions.loginFailure());
   }
@@ -38,7 +43,8 @@ export function* register({ email: providedEmail, password, name }) {
     yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully signed up!', type: SNACKBAR_TYPES.SUCCESS }));
     history.push('/');
   } catch (err) {
-    const { message } = err.response.data.errors[0];
+    console.log('function*register -> err', err);
+    const message = formatErrorMessage(err);
     yield put(GlobalActions.showSnackbarMessage({ message, type: SNACKBAR_TYPES.ERROR }));
     yield put(UserActions.registerFailure());
   }
@@ -50,7 +56,8 @@ export function* logout() {
     yield put(UserActions.logoutSuccess(user));
     yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully logged out!', type: SNACKBAR_TYPES.SUCCESS }));
   } catch (err) {
-    const { message } = err.response.data.errors[0];
+    console.log('function*logout -> err', err);
+    const message = formatErrorMessage(err);
     yield put(GlobalActions.showSnackbarMessage({ message, type: SNACKBAR_TYPES.ERROR }));
     yield put(UserActions.logoutFailure());
   }
