@@ -7,6 +7,9 @@ import {
   SAVE_DATA_GENERATION_EVENT_SUCCESS,
   SAVE_DATA_GENERATION_EVENT_FAILURE,
 } from './dataGenerationConstants';
+import {
+  LOGOUT_SUCCESS,
+} from '../user/userConstants';
 
 // The initial state of the App
 export const initialState = {
@@ -38,6 +41,8 @@ const layoutReducer = (state = initialState, action) => produce(state, (draft) =
     case SAVE_DATA_GENERATION_EVENT_FAILURE:
       draft.loadingSaveDataGenerationEvent = false;
       break;
+    case LOGOUT_SUCCESS:
+      return initialState;
   }
 });
 

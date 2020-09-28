@@ -60,9 +60,7 @@ const userReducer = (state = initialState, action) => produce(state, (draft) => 
       draft.loadingRegister = false;
       break;
     case LOGOUT_SUCCESS:
-      draft.user = null;
-      setLoggedInState();
-      break;
+      draft = initialState;
   }
 });
 
