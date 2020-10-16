@@ -52,8 +52,8 @@ export function* register({ email: providedEmail, password, name }) {
 
 export function* logout() {
   try {
-    const user = yield call(UserRequests.logout);
-    yield put(UserActions.logoutSuccess(user));
+    yield call(UserRequests.logout);
+    yield put(UserActions.logoutSuccess());
     yield put(GlobalActions.showSnackbarMessage({ message: 'Successfully logged out!', type: SNACKBAR_TYPES.SUCCESS }));
   } catch (err) {
     console.log('function*logout -> err', err);

@@ -22,6 +22,7 @@ export const initialState = {
 };
 
 /* eslint-disable default-case, no-param-reassign */
+/* eslint-disable default-case, consistent-return */
 const userReducer = (state = initialState, action) => produce(state, (draft) => {
   const setLoggedInState = () => { draft.isLoggedIn = Boolean(action.user); };
   switch (action.type) {
@@ -60,7 +61,7 @@ const userReducer = (state = initialState, action) => produce(state, (draft) => 
       draft.loadingRegister = false;
       break;
     case LOGOUT_SUCCESS:
-      draft = initialState;
+      return { ...initialState, isUserFetched: true };
   }
 });
 
