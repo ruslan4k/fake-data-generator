@@ -70,6 +70,37 @@ function SignIn() {
           <Button variant="contained" color="primary" type="submit" disabled={!isValid}>
             Sign In
           </Button>
+          <div>
+            <div className="inline-flex flex-col">
+              <Button
+                component="a"
+                href="http://localhost:3600/auth/social/google"
+                variant="contained"
+                color="secondary"
+                type="submit"
+              >
+                google
+              </Button>
+              <Button
+                component="a"
+                href="http://localhost:3600/auth/social/github"
+                variant="contained"
+                color="secondary"
+                type="submit"
+              >
+                github
+              </Button>
+              <Button
+                component="a"
+                href="http://localhost:3600/auth/social/facebook"
+                variant="contained"
+                color="secondary"
+                type="submit"
+              >
+                facebook
+              </Button>
+            </div>
+          </div>
         </div>
       </form>
     </div>

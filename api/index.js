@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 require('dotenv').config();
-require('./services/userService');
+require('./middlewares/passport');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
+const passport = require('passport');
 const session = require('./middlewares/session');
 const router = require('./routes');
 const { APP_URL, ENV } = require('./constants/envVariables');
@@ -38,6 +39,8 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 app.use(session);
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(router);
 app.all('*', () => {
   throw new NotFoundError();
