@@ -1,13 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
-const NotFoundError = require('../constants/errors/notFoundError');
 const UserService = require('../services/userService');
 
 const createUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     const user = await UserService.createUser({ name, email, password });
-    req.session.user = user;
     return res.send({ user });
   } catch (err) {
     return next(err);
@@ -16,10 +14,7 @@ const createUser = async (req, res, next) => {
 
 const getUserByEmailAndPassword = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await UserService.getUserByEmailAndPassword(email, password);
-    if (!user) throw new NotFoundError('Not Valid Credentials');
-    req.session.user = user;
+    const { user } = req;
     return res.send({ user });
   } catch (err) {
     return next(err);
@@ -29,6 +24,7 @@ const getUserByEmailAndPassword = async (req, res, next) => {
 const getCurrentUser = async (req, res, next) => {
   try {
     const { user } = req;
+    console.log('getCurrentUser -> user', user);
     if (!user) return res.send({ user: null });
     return res.send({ user });
   } catch (err) {
@@ -38,7 +34,7 @@ const getCurrentUser = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   try {
-    await req.session.destroy();
+    await req.logout();
     return res.sendStatus(200);
   } catch (err) {
     return next(err);

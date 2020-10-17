@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import dayjs from 'dayjs';
 import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
 import * as DataGenerationSelectors from '../../../state/dataGeneration/dataGenerationSelectors';
+import * as UserSelectors from '../../../state/user/userSelectors';
 
 const useStyles = makeStyles({
   container: {
@@ -25,9 +26,10 @@ function HistoryPage() {
   const { container } = useStyles();
   const history = useHistory();
   const dataGenerationEventsHistory = useSelector((state) => DataGenerationSelectors.selectDataGenerationEventsHistory(state));
+  const isLoggedIn = useSelector((state) => UserSelectors.selectLoggedInStatus(state));
   useEffect(() => {
-    dispatch(DataGenerationActions.getDataGenerationEventsHistoryRequest());
-  }, [dispatch]);
+    if (isLoggedIn) dispatch(DataGenerationActions.getDataGenerationEventsHistoryRequest());
+  }, [dispatch, isLoggedIn]);
   return (
     <div className={cn(container, 'flex-inline m-auto')}>
       {dataGenerationEventsHistory.length > 0 ? (

@@ -1,8 +1,8 @@
 const express = require('express');
 const { body } = require('express-validator');
+const passport = require('passport');
 const userController = require('../controllers/userController');
 const validationMiddleware = require('../middlewares/validationMiddleware');
-const authenticate = require('../middlewares/authenticate');
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.route('/')
 
 router.route('/login')
   .post([
-    body('email')
+    body('username')
       .not()
       .isEmpty()
       .isEmail()
@@ -34,12 +34,12 @@ router.route('/login')
       .not()
       .isEmpty()
       .withMessage('Password must be provided'),
-  ], validationMiddleware, userController.getUserByEmailAndPassword);
+  ], validationMiddleware, passport.authenticate('local'), userController.getUserByEmailAndPassword);
 
 router.route('/logout')
   .get(userController.logout);
 
 router.route('/me')
-  .get(authenticate, userController.getCurrentUser);
+  .get(userController.getCurrentUser);
 
 module.exports = router;
