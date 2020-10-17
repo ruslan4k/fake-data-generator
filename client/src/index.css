@@ -1,25 +1,30 @@
 @tailwind base;
-
 @tailwind components;
-
 @tailwind utilities;
 
-@import './tailwind.css';
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import './tailwind.output.css';
 
 html {
   font-size: 10px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+}
+
+a[role=button] {
+  text-decoration: none;
+}
+
+button:focus {
+  outline: none;
 }

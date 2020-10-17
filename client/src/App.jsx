@@ -5,15 +5,13 @@ import Routes from './features/Routes';
 import configureStore from './state/configureStore';
 import history from './helpers/history';
 
-import './App.css';
-
 function App() {
   const initialState = {};
   const store = configureStore(initialState, history);
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <div className="App">
+        <div className="text-center">
           <Routes />
         </div>
       </ConnectedRouter>

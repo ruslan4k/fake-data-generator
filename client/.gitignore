@@ -3,5 +3,5 @@
 
 /build
 yarn.lock
-package-lock.json
 .env
+/src/tailwind.output.css

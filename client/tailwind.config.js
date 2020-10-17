@@ -1,5 +1,13 @@
 module.exports = {
-  purge: [],
+  purge: [
+    'src/**/*.js',
+    'src/**/*.jsx',
+    'public/**/*.html',
+  ],
+  future: {
+    purgeLayersByDefault: true,
+    removeDeprecatedGapUtilities: true,
+  },
   theme: {
     spacing: {
       px: '1px',
