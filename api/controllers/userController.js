@@ -24,7 +24,6 @@ const getUserByEmailAndPassword = async (req, res, next) => {
 const getCurrentUser = async (req, res, next) => {
   try {
     const { user } = req;
-    console.log('getCurrentUser -> user', user);
     if (!user) return res.send({ user: null });
     return res.send({ user });
   } catch (err) {

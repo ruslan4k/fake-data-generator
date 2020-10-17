@@ -14,7 +14,7 @@ const {
 } = process.env;
 const ENV = NODE_ENV;
 
-const { APP_URL } = config[ENV];
+const { APP_URL, API_URL } = config[ENV];
 
 module.exports = {
   PORT,
@@ -22,6 +22,7 @@ module.exports = {
   SESSION_KEY,
   ENV,
   APP_URL,
+  API_URL,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   GITHUB_CLIENT_ID,
