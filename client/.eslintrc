@@ -1,6 +1,7 @@
 {
   "parser": "babel-eslint",
   "rules": {
+    "react/jsx-curly-newline": "off",
     "prettier/prettier": "error",
     "implicit-arrow-linebreak": "off",
     "import/prefer-default-export": "off",

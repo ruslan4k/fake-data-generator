@@ -11,14 +11,14 @@ const generateFirstName = () => firstNamesArray[generateRandomInteger(firstNames
 const generateLastName = () => lastNamesArray[generateRandomInteger(lastNamesArray.length)];
 const generateRandomEmailDomain = () => emailDomainsArray[generateRandomInteger(emailDomainsArray.length)];
 
-const generateData = (dataType, firstName, lastName) => {
+const generateData = (dataType, firstName, lastName, customDomain) => {
   switch (dataType) {
     case FIRST_NAME:
       return generateFirstName();
     case LAST_NAME:
       return generateLastName();
     case EMAIL: {
-      const domain = generateRandomEmailDomain();
+      const domain = customDomain || generateRandomEmailDomain();
       const valueBeforeDomain = `${firstName || generateFirstName()}.${lastName || generateLastName()}${Math.floor(
         Math.random() * 10000
       )}`.toLowerCase();
@@ -41,8 +41,8 @@ export const generateRows = (columns, rowsToGenerateNumber) => {
     let firstName;
     let lastName;
     sortedColumns.forEach((columnItem) => {
-      const { columnName, columnType } = columnItem;
-      const rowValue = generateData(columnType, firstName, lastName);
+      const { columnName, columnType, customDomain } = columnItem;
+      const rowValue = generateData(columnType, firstName, lastName, customDomain);
       if (columnType === FIRST_NAME) firstName = rowValue;
       if (columnType === LAST_NAME) lastName = rowValue;
       generatedRow[columnName] = rowValue;

@@ -30,7 +30,7 @@
     "yup": "^0.29.3"
   },
   "scripts": {
-    "tailwind": "tailwindcss build src/index.css -o src/tailwind.output.css",
+    "tailwind": "tailwindcss build -o src/tailwind.output.css",
     "prebuild": "NODE_ENV=production npm run tailwind",
     "build": "react-scripts build",
     "start": "react-scripts start",

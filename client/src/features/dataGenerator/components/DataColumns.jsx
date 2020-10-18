@@ -11,7 +11,11 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
   const handleChangeDataRow = (event, index, field) => {
     const newValue = event.target.value;
     const updatedDataColumns = columns.slice();
-    updatedDataColumns[index][field] = newValue;
+    if (field === 'isCustomDomainEnabled') {
+      updatedDataColumns[index][field] = !updatedDataColumns[index][field];
+    } else {
+      updatedDataColumns[index][field] = newValue;
+    }
     setColumns(updatedDataColumns);
   };
 
@@ -30,7 +34,7 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
         <Droppable droppableId="droppable">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {columns.map(({ columnName, columnType, id }, index) => (
+              {columns.map(({ columnName, columnType, id, isCustomDomainEnabled, customDomain }, index) => (
                 <Draggable draggableId={id} index={index} key={id}>
                   {(providedTwo) => {
                     const dragHandleProps = { ...providedTwo.dragHandleProps };
@@ -41,8 +45,14 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
                           dragHandleProps={dragHandleProps}
                           columnName={columnName}
                           columnType={columnType}
+                          customDomain={customDomain}
+                          isCustomDomainEnabled={isCustomDomainEnabled}
                           handleChangeDataRowColumnName={(event) => handleChangeDataRow(event, index, 'columnName')}
                           handleChangeDataRowColumnType={(event) => handleChangeDataRow(event, index, 'columnType')}
+                          handleChangeShowCustomDomainField={(event) =>
+                            handleChangeDataRow(event, index, 'isCustomDomainEnabled')
+                          }
+                          handleChangeCustomDomainField={(event) => handleChangeDataRow(event, index, 'customDomain')}
                           handleDeleteDataRow={() => handleDeleteDataRow(index)}
                           isDuplicatedColumnName={Boolean(duplicatedColumnNames[columnName])}
                         />

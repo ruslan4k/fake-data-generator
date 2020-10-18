@@ -139,7 +139,20 @@ function DataGeneratorPage() {
                   </CSVLink>
                   <div>
                     <CopyToClipboard text={JSON.stringify(generatedData.rows)}>
-                      <Button variant="contained" color="primary" disabled={!isValidForm} className="w-full">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={!isValidForm}
+                        className="w-full"
+                        onClick={() =>
+                          dispatch(
+                            GlobalActions.showSnackbarMessage({
+                              message: 'Copied',
+                              type: SNACKBAR_TYPES.SUCCESS,
+                            })
+                          )
+                        }
+                      >
                         Copy Rows (JSON)
                       </Button>
                     </CopyToClipboard>
