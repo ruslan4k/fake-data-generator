@@ -24,11 +24,13 @@ function SnackbarComponent() {
   return (
     <>
       <Snackbar open={isMessage} autoHideDuration={3000} onClose={handleCloseMessage}>
-        {isMessage && (
-          <Alert classes={{ root: 'flex items-center' }} onClose={handleCloseMessage} severity={type}>
-            {message}
-          </Alert>
-        )}
+        <div>
+          {isMessage && (
+            <Alert classes={{ root: 'flex items-center' }} onClose={handleCloseMessage} severity={type}>
+              {message}
+            </Alert>
+          )}
+        </div>
       </Snackbar>
     </>
   );

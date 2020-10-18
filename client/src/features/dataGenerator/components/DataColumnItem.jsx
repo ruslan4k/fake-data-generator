@@ -20,7 +20,7 @@ function DataColumnItem({
   const helperText = isDuplicatedColumnName ? 'Duplicated Column Name' : '';
   return (
     <div className="flex justify-center mb-12 w-full">
-      <div item className="w-5/12 mr-12">
+      <div className="w-5/12 mr-12">
         <TextField
           label="Column Name"
           className="w-full"

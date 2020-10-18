@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import AppBar from '@material-ui/core/AppBar';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import Tabs from '@material-ui/core/Tabs';
@@ -46,56 +47,53 @@ function Header() {
     history.push(path);
   };
   return (
-    <div className="w-full flex justify-between py-16 px-16">
-      <Tabs
-        value={tabIndex}
-        indicatorColor="primary"
-        textColor="primary"
-        onChange={handleChange}
-        aria-label="disabled tabs example"
-      >
-        {tabs.map(({ label }) => (
-          <Tab key={label} label={label} />
-        ))}
-      </Tabs>
-      {isUserFetched && (
-        <>
-          {!isLoggedIn ? (
-            <div className="flex ml-auto">
-              {pathname !== '/signin' && (
-                <div className="ml-16">
-                  <Link to="/signin">
-                    <Button variant="contained" color="primary">
-                      Sign In
-                    </Button>
-                  </Link>
+    <>
+      <AppBar color="default" className="h-48">
+        <div className="w-full flex justify-between items-center px-16">
+          <Tabs
+            value={tabIndex}
+            indicatorColor="secondary"
+            textColor="secondary"
+            onChange={handleChange}
+            aria-label="disabled tabs example"
+          >
+            {tabs.map(({ label }) => (
+              <Tab key={label} label={label} />
+            ))}
+          </Tabs>
+          {isUserFetched && (
+            <>
+              {!isLoggedIn ? (
+                <div className="flex ml-auto">
+                  {pathname !== '/signin' && (
+                    <div className="ml-16">
+                      <Link to="/signin">
+                        <Button variant="outlined">Sign In</Button>
+                      </Link>
+                    </div>
+                  )}
+                  {pathname !== '/signup' && (
+                    <div className="ml-16">
+                      <Link to="/signup">
+                        <Button variant="outlined">Sign Up</Button>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="flex items-center ml-auto">
+                  <div className="mr-8 text-14">{user.name}</div>
+                  <Button variant="contained" onClick={handleLogoutUser}>
+                    Logout
+                  </Button>
                 </div>
               )}
-              {pathname !== '/signup' && (
-                <div className="ml-16">
-                  <Link to="/signup">
-                    <Button variant="contained" color="secondary">
-                      Sign Up
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="flex items-center ml-auto">
-              <div className="mr-8">
-                {user.name}
-                {' '}
-                {user.email}
-              </div>
-              <Button variant="contained" onClick={handleLogoutUser}>
-                Logout
-              </Button>
-            </div>
+            </>
           )}
-        </>
-      )}
-    </div>
+        </div>
+      </AppBar>
+      <div className="h-48" />
+    </>
   );
 }
 

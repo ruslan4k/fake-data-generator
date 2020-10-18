@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import * as UserActions from '../../state/user/userActions';
 import { emailValidation, passwordValidation } from '../../constants/validations';
+import AuthCardWrapper from './AuthCardWrapper';
 
 function SignIn() {
   const dispatch = useDispatch();
@@ -23,9 +23,7 @@ function SignIn() {
     password: passwordValidation,
   });
 
-  const {
-    errors, handleChange, touched, handleBlur, isValid, handleSubmit,
-  } = useFormik({
+  const { errors, handleChange, touched, handleBlur, isValid, handleSubmit } = useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -38,72 +36,36 @@ function SignIn() {
   const passwordError = errors.password && touched.password ? errors.password : null;
 
   return (
-    <div className="inline-flex flex-col">
-      <form onSubmit={handleSubmit}>
-        <div className="mb-10">
-          <TextField
-            label="Email"
-            type="email"
-            variant="outlined"
-            name="email"
-            id="email"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            helperText={emailError}
-            error={Boolean(emailError)}
-            required
-          />
-        </div>
+    <AuthCardWrapper isValid={isValid} handleSubmit={handleSubmit} title="Login To Your Account" submitButtonLabel="Login">
+      <div className="mb-10 w-full">
         <TextField
-          label="Password"
-          type="password"
+          className="w-full"
+          label="Email"
+          type="email"
           variant="outlined"
-          name="password"
-          id="password"
+          name="email"
+          id="email"
           onChange={handleChange}
           onBlur={handleBlur}
-          helperText={passwordError}
-          error={Boolean(passwordError)}
+          helperText={emailError}
+          error={Boolean(emailError)}
           required
         />
-        <div className="mt-10">
-          <Button variant="contained" color="primary" type="submit" disabled={!isValid}>
-            Sign In
-          </Button>
-          <div>
-            <div className="inline-flex flex-col">
-              <Button
-                component="a"
-                href="http://localhost:3600/auth/social/google"
-                variant="contained"
-                color="secondary"
-                type="submit"
-              >
-                google
-              </Button>
-              <Button
-                component="a"
-                href="http://localhost:3600/auth/social/github"
-                variant="contained"
-                color="secondary"
-                type="submit"
-              >
-                github
-              </Button>
-              <Button
-                component="a"
-                href="http://localhost:3600/auth/social/facebook"
-                variant="contained"
-                color="secondary"
-                type="submit"
-              >
-                facebook
-              </Button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
+      </div>
+      <TextField
+        className="w-full"
+        label="Password"
+        type="password"
+        variant="outlined"
+        name="password"
+        id="password"
+        onChange={handleChange}
+        onBlur={handleBlur}
+        helperText={passwordError}
+        error={Boolean(passwordError)}
+        required
+      />
+    </AuthCardWrapper>
   );
 }
 
