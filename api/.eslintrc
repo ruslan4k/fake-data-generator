@@ -1,5 +1,4 @@
 {
-  "extends": "airbnb-base",
   "rules": {
     "no-underscore-dangle": "off",
     "implicit-arrow-linebreak": "off",
@@ -10,5 +9,6 @@
         "tabWidth": 2
       }
     ]
-  }
+  },
+  "extends": ["airbnb", "prettier"]
 }

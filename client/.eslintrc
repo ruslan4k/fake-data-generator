@@ -1,5 +1,4 @@
 {
-  "extends": "airbnb",
   "parser": "babel-eslint",
   "rules": {
     "implicit-arrow-linebreak": "off",
@@ -11,5 +10,6 @@
         "tabWidth": 2
       }
     ]
-  }
+  },
+  "extends": ["airbnb", "prettier"]
 }
