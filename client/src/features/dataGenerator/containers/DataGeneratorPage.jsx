@@ -8,45 +8,18 @@ import { v4 as uuid } from 'uuid';
 import { CSVLink } from 'react-csv';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { FIRST_NAME, LAST_NAME, EMAIL, UUID } from '../../../constants/dataTypes';
+import { FIRST_NAME, LAST_NAME, EMAIL } from '../../../constants/dataTypes';
 import OutputBox from '../components/OutputBox';
 import DataColumns from '../components/DataColumns';
-import lastNamesArray from '../../../constants/data/lastNames';
-import firstNamesArray from '../../../constants/data/firstNames';
-import emailDomainsArray from '../../../constants/data/emailDomains';
+
 import { SNACKBAR_TYPES } from '../../../constants/snackbarConstants';
 import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
 import * as GlobalActions from '../../../state/global/globalActions';
 import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
 
+import { generateRows } from '../../../helpers/dataGenerationHelpers';
+
 const DEFAULT_ROWS_NUMBER = 100;
-
-const generateRandomInteger = (maxValue) => Math.floor(Math.random() * maxValue);
-const generateFirstName = () => firstNamesArray[generateRandomInteger(firstNamesArray.length)];
-const generateLastName = () => lastNamesArray[generateRandomInteger(lastNamesArray.length)];
-const generateRandomEmailDomain = () => emailDomainsArray[generateRandomInteger(emailDomainsArray.length)];
-
-const generateData = (dataType) => {
-  switch (dataType) {
-    case FIRST_NAME:
-      return generateFirstName();
-    case LAST_NAME:
-      return generateLastName();
-    case EMAIL: {
-      const domain = generateRandomEmailDomain();
-      const valueBeforeDomain = `${generateFirstName().toLocaleLowerCase()}.${generateLastName().toLocaleLowerCase()}${Math.floor(
-        Math.random() * 10000
-      )}`;
-      const email = `${valueBeforeDomain}@${domain}`;
-      return email;
-    }
-    case UUID: {
-      return uuid();
-    }
-    default:
-      return '';
-  }
-};
 
 function DataGeneratorPage() {
   const dispatch = useDispatch();
@@ -109,17 +82,7 @@ function DataGeneratorPage() {
   };
 
   const handleGenerateData = () => {
-    const rows = [];
-    for (let index = 0; index < rowsToGenerateNumber; index += 1) {
-      const generatedRow = {};
-      columns.forEach((columnItem) => {
-        const { columnName, columnType } = columnItem;
-        generatedRow[columnName] = generateData(columnType);
-        // eslint-disable-next-line no-underscore-dangle
-        generatedRow[DEFAULT_KEY_NAME] = uuid();
-      });
-      rows.push(generatedRow);
-    }
+    const rows = generateRows(columns, rowsToGenerateNumber);
     const csvRows = rows.map(({ [DEFAULT_KEY_NAME]: defaultKeyName, ...otherFields }) => otherFields);
     const generationEvent = {
       columns,
