@@ -13,7 +13,7 @@ const userSchema = new Schema(
     },
     password: { type: String },
   },
-  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
 
 const User = mongoose.model('User', userSchema);

@@ -48,11 +48,7 @@ function OutputBox({ generatedDataRows, columns }) {
               <TableHead>
                 <TableRow>
                   {tableColumns.map((column) => (
-                    <TableCell
-                      key={column.columnName}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
+                    <TableCell key={column.columnName} align={column.align} style={{ minWidth: column.minWidth }}>
                       {column.columnName}
                     </TableCell>
                   ))}
@@ -63,11 +59,7 @@ function OutputBox({ generatedDataRows, columns }) {
                   <TableRow hover role="checkbox" tabIndex={-1} key={row[DEFAULT_KEY_NAME]}>
                     {columns.map((column) => {
                       const value = row[column.columnName];
-                      return (
-                        <TableCell key={column.id}>
-                          {value}
-                        </TableCell>
-                      );
+                      return <TableCell key={column.id}>{value}</TableCell>;
                     })}
                   </TableRow>
                 ))}
@@ -85,7 +77,6 @@ function OutputBox({ generatedDataRows, columns }) {
           />
         </Paper>
       )}
-
     </div>
   );
 }

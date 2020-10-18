@@ -14,7 +14,7 @@ const dataGenerationSchema = new Schema(
     columns: { type: [DataColumnSchema], required: true },
     rowsNumber: { type: Number, required: true },
   },
-  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
 
 const DataGeneration = mongoose.model('DataGeneration', dataGenerationSchema);

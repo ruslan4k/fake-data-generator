@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Switch,
-  Route,
-} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import DataGeneratorPage from './dataGenerator/containers/DataGeneratorPage';
 import SignIn from './authentication/SignIn';
@@ -37,7 +34,6 @@ function Routes() {
         </Route>
       </Switch>
     </>
-
   );
 }
 

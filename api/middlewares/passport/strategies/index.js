@@ -26,8 +26,8 @@ passport.use(
       clientSecret: FACEBOOK_CLIENT_SECRET,
       callbackURL: `${API_URL}/auth/social/facebook/callback`,
     },
-    (accessToken, refreshToken, profile, cb) => socialSignInService.handlePassportSocialSignIn(profile, cb),
-  ),
+    (accessToken, refreshToken, profile, cb) => socialSignInService.handlePassportSocialSignIn(profile, cb)
+  )
 );
 
 // github
@@ -38,8 +38,8 @@ passport.use(
       clientSecret: GITHUB_CLIENT_SECRET,
       callbackURL: `${API_URL}/auth/social/github/callback`,
     },
-    (accessToken, refreshToken, profile, cb) => socialSignInService.handlePassportSocialSignIn(profile, cb),
-  ),
+    (accessToken, refreshToken, profile, cb) => socialSignInService.handlePassportSocialSignIn(profile, cb)
+  )
 );
 
 // google
@@ -50,8 +50,8 @@ passport.use(
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: `${API_URL}/auth/social/google/callback`,
     },
-    (accessToken, refreshToken, profile, cb) => socialSignInService.handlePassportSocialSignIn(profile, cb),
-  ),
+    (accessToken, refreshToken, profile, cb) => socialSignInService.handlePassportSocialSignIn(profile, cb)
+  )
 );
 
 // local
@@ -64,5 +64,5 @@ passport.use(
     } catch (error) {
       return cb(error);
     }
-  }),
+  })
 );

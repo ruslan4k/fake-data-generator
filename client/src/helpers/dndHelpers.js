@@ -16,11 +16,7 @@ export function onDragEnd(result, data, setData) {
     return;
   }
 
-  const updatedDate = reorder(
-    data,
-    result.source.index,
-    result.destination.index,
-  );
+  const updatedDate = reorder(data, result.source.index, result.destination.index);
 
   setData(updatedDate);
 }

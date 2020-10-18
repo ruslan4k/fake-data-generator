@@ -32,11 +32,13 @@ const app = express();
 const PORT = NODE_PORT || 3600;
 
 app.use(morgan('dev'));
-app.use(cors({
-  //  allow cookies (or other user credentials) to be included on cross-origin requests
-  credentials: true,
-  origin: APP_URL,
-}));
+app.use(
+  cors({
+    //  allow cookies (or other user credentials) to be included on cross-origin requests
+    credentials: true,
+    origin: APP_URL,
+  })
+);
 app.use(bodyParser.json());
 app.use(session);
 app.use(passport.initialize());

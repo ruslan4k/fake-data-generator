@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
-import {
-  call, put, takeEvery,
-} from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import * as UserActions from './userActions';
 import * as UserRequests from './userRequests';
 import * as UserConstants from './userConstants';

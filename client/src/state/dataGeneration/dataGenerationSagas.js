@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
-import {
-  call, put, takeEvery,
-} from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 import * as DataGenerationActions from './dataGenerationActions';
 import * as DataGenerationRequests from './dataGenerationRequests';
 import * as DataGenerationConstants from './dataGenerationConstants';

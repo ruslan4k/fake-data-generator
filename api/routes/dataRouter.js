@@ -4,7 +4,8 @@ const requireAuthentication = require('../middlewares/requireAuthentication');
 
 const router = express.Router();
 
-router.route('/history')
+router
+  .route('/history')
   .get(requireAuthentication, dataController.getHistory)
   .post(requireAuthentication, dataController.addDataGenerationToHistory);
 

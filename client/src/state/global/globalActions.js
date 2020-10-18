@@ -1,6 +1,4 @@
-import {
-  SET_SNACKBAR_MESSAGE,
-} from './globalConstants';
+import { SET_SNACKBAR_MESSAGE } from './globalConstants';
 
 // eslint-disable-next-line import/prefer-default-export
 export function showSnackbarMessage({ message, type }) {
