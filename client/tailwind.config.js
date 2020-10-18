@@ -1,14 +1,17 @@
 module.exports = {
-  purge: [
-    'src/**/*.js',
-    'src/**/*.jsx',
-    'public/**/*.html',
-  ],
+  purge: ['src/**/*.js', 'src/**/*.jsx', 'public/**/*.html'],
   future: {
     purgeLayersByDefault: true,
     removeDeprecatedGapUtilities: true,
   },
   theme: {
+    screens: {
+      sm: '600px',
+      md: '960px',
+      lg: '1280px',
+      xl: '1920px',
+      print: { raw: 'print' },
+    },
     spacing: {
       px: '1px',
       0: '0',
@@ -29,8 +32,23 @@ module.exports = {
       48: '4.8rem',
       56: '5.6rem',
       64: '6.4rem',
+      128: '12.8rem',
+      320: '32rem',
+    },
+    fontSize: {
+      8: '0.8rem',
+      10: '1rem',
+      12: '1.2rem',
+      16: '1.6rem',
+      20: '2rem',
+      24: '2.4rem',
+      32: '3.2rem',
+      40: '4rem',
+      48: '4.8rem',
+      56: '5.6rem',
+      64: '6.4rem',
     },
   },
-  variants: {},
+
   plugins: [],
 };

@@ -29,19 +29,13 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="droppable">
           {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
+            <div {...provided.droppableProps} ref={provided.innerRef}>
               {columns.map(({ columnName, columnType, id }, index) => (
                 <Draggable draggableId={id} index={index} key={id}>
                   {(providedTwo) => {
                     const dragHandleProps = { ...providedTwo.dragHandleProps };
                     return (
-                      <div
-                        ref={providedTwo.innerRef}
-                        {...providedTwo.draggableProps}
-                      >
+                      <div ref={providedTwo.innerRef} {...providedTwo.draggableProps}>
                         <DataColumnItem
                           key={id}
                           dragHandleProps={dragHandleProps}
@@ -63,7 +57,6 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
         </Droppable>
       </DragDropContext>
     </div>
-
   );
 }
 

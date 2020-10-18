@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import isEqual from 'lodash/isEqual';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { v4 as uuid } from 'uuid';
-import cn from 'classnames';
 import { CSVLink } from 'react-csv';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import {
-  FIRST_NAME, LAST_NAME, EMAIL, UUID,
-} from '../../../constants/dataTypes';
+import { FIRST_NAME, LAST_NAME, EMAIL, UUID } from '../../../constants/dataTypes';
 import OutputBox from '../components/OutputBox';
 import DataColumns from '../components/DataColumns';
 import lastNamesArray from '../../../constants/data/lastNames';
@@ -22,10 +18,6 @@ import { SNACKBAR_TYPES } from '../../../constants/snackbarConstants';
 import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
 import * as GlobalActions from '../../../state/global/globalActions';
 import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
-
-const useStyles = makeStyles({
-  container: { minWidth: 300, maxWidth: '100%' },
-});
 
 const DEFAULT_ROWS_NUMBER = 100;
 
@@ -43,7 +35,7 @@ const generateData = (dataType) => {
     case EMAIL: {
       const domain = generateRandomEmailDomain();
       const valueBeforeDomain = `${generateFirstName().toLocaleLowerCase()}.${generateLastName().toLocaleLowerCase()}${Math.floor(
-        Math.random() * 10000,
+        Math.random() * 10000
       )}`;
       const email = `${valueBeforeDomain}@${domain}`;
       return email;
@@ -60,7 +52,6 @@ function DataGeneratorPage() {
   const dispatch = useDispatch();
   const location = useLocation();
   const { state: locationState } = location;
-  const { container } = useStyles();
   const initialColumnsState = [
     { columnName: 'firstName', columnType: FIRST_NAME, id: uuid() },
     { columnName: 'lastName', columnType: LAST_NAME, id: uuid() },
@@ -89,19 +80,20 @@ function DataGeneratorPage() {
 
   const isData = Boolean(generatedData.rows.length);
 
-  const isDefaultState = !isData
-    && isEqual(
+  const isDefaultState =
+    !isData &&
+    isEqual(
       initialColumnsState.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
-      columns.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
-    )
-    && isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
+      columns.map((col) => ({ columnName: col.columnName, columnType: col.columnType }))
+    ) &&
+    isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
 
   const handleResetToDefault = () => {
     setColumns(initialColumnsState);
     setColumnsToGenerateNumber(DEFAULT_ROWS_NUMBER);
     setGeneratedDataRows(initialGeneratedDataState);
     dispatch(
-      GlobalActions.showSnackbarMessage({ message: 'Settings successfully reset to default!', type: SNACKBAR_TYPES.SUCCESS }),
+      GlobalActions.showSnackbarMessage({ message: 'Settings successfully reset to default!', type: SNACKBAR_TYPES.SUCCESS })
     );
   };
 
@@ -141,25 +133,29 @@ function DataGeneratorPage() {
   return (
     <div className="p-24">
       <p className="mb-16">Fake Data Generator</p>
-      <div className="flex flex-col items-center">
-        <div className={cn('flex flex-col', container)}>
+      <div className="flex justify-center">
+        <div className="w-full md:w-10/12 lg:w-6/12 xl:w-4/12">
           <DataColumns setColumns={setColumns} columns={columns} duplicatedColumnNames={duplicatedColumnNames} />
-          <div className="flex justify-between my-8">
-            <TextField
-              label="Columns to Generate Number"
-              type="number"
-              variant="outlined"
-              value={rowsToGenerateNumber}
-              onChange={handleColumnsToGenerateNumber}
-            />
-            <Fab size="small" className="self-end" color="primary" aria-label="add" onClick={handleAddColumn}>
-              <AddIcon />
-            </Fab>
+          <div className="flex justify-center w-full">
+            <div className="w-5/12 mr-12">
+              <TextField
+                label="Rows Number"
+                type="number"
+                variant="outlined"
+                className="w-full"
+                value={rowsToGenerateNumber}
+                onChange={handleColumnsToGenerateNumber}
+              />
+            </div>
+            <div className="mr-12 w-7/12 flex justify-end">
+              <Fab size="small" color="primary" aria-label="add" onClick={handleAddColumn}>
+                <AddIcon />
+              </Fab>
+            </div>
           </div>
-
           <div className="flex flex-col items-start">
             {!isDefaultState && (
-              <div className="mb-8">
+              <div className="mt-16">
                 <Button variant="contained" onClick={handleResetToDefault}>
                   Reset To Default
                 </Button>
@@ -178,8 +174,8 @@ function DataGeneratorPage() {
               )}
             </div>
           </div>
+          <OutputBox generatedDataRows={generatedData.rows} columns={generatedData.columns} />
         </div>
-        <OutputBox generatedDataRows={generatedData.rows} columns={generatedData.columns} />
       </div>
     </div>
   );

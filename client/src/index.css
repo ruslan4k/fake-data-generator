@@ -5,7 +5,7 @@
 @import './tailwind.output.css';
 
 html {
-  font-size: 10px;
+  font-size: 62.5%;
 }
 
 body {
@@ -13,7 +13,9 @@ body {
   line-height: 1.4;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -21,7 +23,7 @@ html, body, #root {
   margin: 0;
 }
 
-a[role=button] {
+a[role='button'] {
   text-decoration: none;
 }
 

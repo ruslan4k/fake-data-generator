@@ -1,28 +1,12 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import {
-  string, func, bool, object,
-} from 'prop-types';
+import { string, func, bool, object } from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DragIndicator from '@material-ui/icons/DragIndicatorSharp';
-import { makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import dataTypes from '../../../constants/dataTypes';
-
-const useStyles = makeStyles({
-  dataTypeSelectStyles: {
-    width: 100,
-    height: 20,
-  },
-  columnNameFieldStyles: {
-    width: 150,
-  },
-  inputStyles: {
-    padding: '12px 10px',
-  },
-});
 
 function DataColumnItem({
   columnName,
@@ -33,14 +17,13 @@ function DataColumnItem({
   isDuplicatedColumnName,
   dragHandleProps,
 }) {
-  const { dataTypeSelectStyles, columnNameFieldStyles } = useStyles();
   const helperText = isDuplicatedColumnName ? 'Duplicated Column Name' : '';
   return (
-    <div className="mb-10 flex flex-row">
-      <div className="mr-16">
+    <div className="flex justify-center mb-12 w-full">
+      <div item className="w-5/12 mr-12">
         <TextField
-          className={columnNameFieldStyles}
           label="Column Name"
+          className="w-full"
           variant="outlined"
           error={isDuplicatedColumnName}
           value={columnName}
@@ -48,13 +31,13 @@ function DataColumnItem({
           helperText={helperText}
         />
       </div>
-      <div className="mr-16">
+      <div className="w-5/12 mr-12">
         <TextField
-          className={dataTypeSelectStyles}
           select
           label="Select"
           value={columnType}
           variant="outlined"
+          className="w-full text-left"
           onChange={handleChangeDataRowColumnType}
         >
           {dataTypes.map((option) => (
@@ -64,16 +47,19 @@ function DataColumnItem({
           ))}
         </TextField>
       </div>
-      <IconButton className="self-start ml-16" aria-label="delete" onClick={handleDeleteDataRow}>
-        <DeleteIcon />
-      </IconButton>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <div {...dragHandleProps}>
-        <IconButton disableRipple disableFocusRipple style={{ pointerEvents: 'none' }}>
-          <DragIndicator />
-        </IconButton>
+      <div className="w-2/12 flex">
+        <div>
+          <IconButton className="self-start" aria-label="delete" onClick={handleDeleteDataRow}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <div {...dragHandleProps}>
+          <IconButton disableRipple disableFocusRipple style={{ pointerEvents: 'none' }}>
+            <DragIndicator />
+          </IconButton>
+        </div>
       </div>
-
     </div>
   );
 }

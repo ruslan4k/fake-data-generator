@@ -11,7 +11,7 @@ function App() {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <div className="text-center">
+        <div className="text-center p-32 text-24">
           <Routes />
         </div>
       </ConnectedRouter>
