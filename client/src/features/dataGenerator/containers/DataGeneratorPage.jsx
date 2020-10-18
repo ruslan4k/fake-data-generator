@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { CSVLink } from 'react-csv';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FIRST_NAME, LAST_NAME, EMAIL } from '../../../constants/dataTypes';
 import OutputBox from '../components/OutputBox';
 import DataColumns from '../components/DataColumns';
@@ -80,16 +81,15 @@ function DataGeneratorPage() {
     const updatedDataColumns = [...columns, { columnName: newColumnName, columnType: FIRST_NAME, id: uuid() }];
     setColumns(updatedDataColumns);
   };
-
   const handleGenerateData = () => {
-    const rows = generateRows(columns, rowsToGenerateNumber);
-    const csvRows = rows.map(({ [DEFAULT_KEY_NAME]: defaultKeyName, ...otherFields }) => otherFields);
+    const generatedRows = generateRows(columns, rowsToGenerateNumber);
+    const csvRows = generatedRows.map(({ [DEFAULT_KEY_NAME]: defaultKeyName, ...otherFields }) => otherFields);
     const generationEvent = {
       columns,
       rowsToGenerateNumber,
     };
     dispatch(DataGenerationActions.saveDataGenerationEventRequest(generationEvent));
-    setGeneratedDataRows({ rows, columns, csvRows });
+    setGeneratedDataRows({ rows: generatedRows, columns, csvRows });
     dispatch(GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }));
   };
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
@@ -116,24 +116,35 @@ function DataGeneratorPage() {
               </Fab>
             </div>
           </div>
-          <div className="flex flex-col items-start">
+          <div className="flex justify-between items-start">
             {!isDefaultState && (
               <div className="mt-16">
-                <Button variant="contained" onClick={handleResetToDefault}>
+                <Button variant="outlined" onClick={handleResetToDefault}>
                   Reset To Default
                 </Button>
               </div>
             )}
-            <div className="mt-16 flex justify-between w-full">
-              <Button variant="contained" color="primary" onClick={handleGenerateData} disabled={!isValidForm}>
-                Generate Data
-              </Button>
+            <div className="mt-16 flex flex-col justify-between ml-auto">
+              <div>
+                <Button size="large" variant="contained" color="primary" onClick={handleGenerateData} disabled={!isValidForm}>
+                  Generate Data
+                </Button>
+              </div>
               {isData && (
-                <CSVLink data={generatedData.csvRows} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
-                  <Button variant="contained" color="secondary" disabled={!isValidForm}>
-                    Download CSV
-                  </Button>
-                </CSVLink>
+                <div className="flex flex-col">
+                  <CSVLink data={generatedData.csvRows} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
+                    <Button variant="contained" color="secondary" disabled={!isValidForm} className="w-full">
+                      Download CSV
+                    </Button>
+                  </CSVLink>
+                  <div>
+                    <CopyToClipboard text={JSON.stringify(generatedData.rows)}>
+                      <Button variant="contained" color="primary" disabled={!isValidForm} className="w-full">
+                        Copy Rows (JSON)
+                      </Button>
+                    </CopyToClipboard>
+                  </div>
+                </div>
               )}
             </div>
           </div>
