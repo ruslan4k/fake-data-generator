@@ -41,7 +41,6 @@ function HistoryPage() {
                   <Typography>{dayjs(event.createdAt).format('HH:mm:ss MMMM DD, YYYY')}</Typography>
                   <Typography className="flex-none">
                     Rows Number:
-                    {' '}
                     {event.rowsNumber}
                   </Typography>
                 </div>
@@ -60,12 +59,10 @@ function HistoryPage() {
                   <div key={`${columnItem.columnType}${columnItem.columnName}`} className="flex">
                     <Typography>
                       Column Name:
-                      {' '}
                       {columnItem.columnName}
                     </Typography>
                     <Typography>
                       Column Type:
-                      {' '}
                       {columnItem.columnType}
                     </Typography>
                   </div>
