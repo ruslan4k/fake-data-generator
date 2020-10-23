@@ -6,7 +6,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { v4 as uuid } from 'uuid';
 import { CSVLink } from 'react-csv';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FIRST_NAME, LAST_NAME, EMAIL, NUMBER } from '../../../constants/dataTypes';
@@ -17,6 +17,7 @@ import { SNACKBAR_TYPES } from '../../../constants/snackbarConstants';
 import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
 import * as GlobalActions from '../../../state/global/globalActions';
 import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
+import * as UserSelectors from '../../../state/user/userSelectors';
 
 import { generateRows } from '../../../helpers/dataGenerationHelpers';
 
@@ -75,7 +76,7 @@ function DataGeneratorPage() {
   const handleColumnsToGenerateNumber = (e) => {
     setColumnsToGenerateNumber(e.target.value);
   };
-
+  const isLoggedIn = useSelector((state) => UserSelectors.selectLoggedInStatus(state));
   const handleAddColumn = () => {
     const columnsNumber = columns.length;
     const newColumnName = `columnName${columnsNumber + 1}`;
@@ -90,7 +91,7 @@ function DataGeneratorPage() {
       columns,
       rowsToGenerateNumber,
     };
-    dispatch(DataGenerationActions.saveDataGenerationEventRequest(generationEvent));
+    if (isLoggedIn) dispatch(DataGenerationActions.saveDataGenerationEventRequest(generationEvent));
     setGeneratedDataRows({ rows: generatedRows, columns, csvRows });
     dispatch(GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }));
   };
