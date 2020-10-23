@@ -34,7 +34,7 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
         <Droppable droppableId="droppable">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {columns.map(({ columnName, columnType, id, isCustomDomainEnabled, customDomain }, index) => (
+              {columns.map(({ columnName, columnType, id, isCustomDomainEnabled, customDomain, minValue, maxValue }, index) => (
                 <Draggable draggableId={id} index={index} key={id}>
                   {(providedTwo) => {
                     const dragHandleProps = { ...providedTwo.dragHandleProps };
@@ -46,6 +46,8 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
                           columnName={columnName}
                           columnType={columnType}
                           customDomain={customDomain}
+                          minValue={minValue}
+                          maxValue={maxValue}
                           isCustomDomainEnabled={isCustomDomainEnabled}
                           handleChangeDataRowColumnName={(event) => handleChangeDataRow(event, index, 'columnName')}
                           handleChangeDataRowColumnType={(event) => handleChangeDataRow(event, index, 'columnType')}
@@ -55,6 +57,8 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
                           handleChangeCustomDomainField={(event) => handleChangeDataRow(event, index, 'customDomain')}
                           handleDeleteDataRow={() => handleDeleteDataRow(index)}
                           isDuplicatedColumnName={Boolean(duplicatedColumnNames[columnName])}
+                          handleChangeMinValue={(event) => handleChangeDataRow(event, index, 'minValue')}
+                          handleChangeMaxValue={(event) => handleChangeDataRow(event, index, 'maxValue')}
                         />
                       </div>
                     );

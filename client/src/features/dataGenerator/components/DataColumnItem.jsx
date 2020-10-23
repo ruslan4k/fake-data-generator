@@ -1,6 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import { string, func, bool, object } from 'prop-types';
+import { string, func, bool, object, number } from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -8,7 +8,8 @@ import DragIndicator from '@material-ui/icons/DragIndicatorSharp';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import { Typography } from '@material-ui/core';
-import dataTypes, { EMAIL } from '../../../constants/dataTypes';
+import dataTypes, { EMAIL, NUMBER } from '../../../constants/dataTypes';
+import { MAX_VALUE, MIN_VALUE } from '../../../constants/dataGenerationConstants';
 
 function DataColumnItem({
   columnName,
@@ -17,6 +18,10 @@ function DataColumnItem({
   handleChangeDataRowColumnType,
   handleChangeShowCustomDomainField,
   handleDeleteDataRow,
+  handleChangeMinValue,
+  handleChangeMaxValue,
+  minValue,
+  maxValue,
   isDuplicatedColumnName,
   dragHandleProps,
   isCustomDomainEnabled,
@@ -25,7 +30,7 @@ function DataColumnItem({
 }) {
   const helperText = isDuplicatedColumnName ? 'Duplicated Column Name' : '';
   return (
-    <>
+    <div className="mb-32">
       <div className="flex justify-center mb-12 w-full">
         <div className="w-5/12 mr-12">
           <TextField
@@ -76,6 +81,7 @@ function DataColumnItem({
             <div className="ml-48">
               <TextField
                 label="Static Domain"
+                variant="outlined"
                 value={customDomain}
                 onChange={handleChangeCustomDomainField}
                 helperText={helperText}
@@ -84,7 +90,27 @@ function DataColumnItem({
           )}
         </div>
       )}
-    </>
+      {columnType === NUMBER && (
+        <div className="text-left mb-12 flex items-center">
+          <div className="mr-12">
+            <TextField
+              label="Min Value"
+              variant="outlined"
+              value={minValue}
+              onChange={handleChangeMinValue}
+              helperText={helperText}
+            />
+          </div>
+          <TextField
+            label="Max Value"
+            variant="outlined"
+            value={maxValue}
+            onChange={handleChangeMaxValue}
+            helperText={helperText}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -100,11 +126,17 @@ DataColumnItem.propTypes = {
   handleChangeShowCustomDomainField: func.isRequired,
   customDomain: string,
   handleChangeCustomDomainField: func.isRequired,
+  handleChangeMinValue: func.isRequired,
+  handleChangeMaxValue: func.isRequired,
+  minValue: number,
+  maxValue: number,
 };
 
 DataColumnItem.defaultProps = {
   isCustomDomainEnabled: false,
   customDomain: '',
+  minValue: MIN_VALUE,
+  maxValue: MAX_VALUE,
 };
 
 export default DataColumnItem;

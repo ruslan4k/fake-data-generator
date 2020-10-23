@@ -9,7 +9,7 @@ import { CSVLink } from 'react-csv';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FIRST_NAME, LAST_NAME, EMAIL } from '../../../constants/dataTypes';
+import { FIRST_NAME, LAST_NAME, EMAIL, NUMBER } from '../../../constants/dataTypes';
 import OutputBox from '../components/OutputBox';
 import DataColumns from '../components/DataColumns';
 
@@ -30,6 +30,7 @@ function DataGeneratorPage() {
     { columnName: 'firstName', columnType: FIRST_NAME, id: uuid() },
     { columnName: 'lastName', columnType: LAST_NAME, id: uuid() },
     { columnName: 'email', columnType: EMAIL, id: uuid() },
+    { columnName: 'number', columnType: NUMBER, id: uuid() },
   ];
   const [columns, setColumns] = useState(initialColumnsState);
   const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
@@ -78,7 +79,8 @@ function DataGeneratorPage() {
   const handleAddColumn = () => {
     const columnsNumber = columns.length;
     const newColumnName = `columnName${columnsNumber + 1}`;
-    const updatedDataColumns = [...columns, { columnName: newColumnName, columnType: FIRST_NAME, id: uuid() }];
+    const newColumn = { columnName: newColumnName, columnType: FIRST_NAME, id: uuid() };
+    const updatedDataColumns = [...columns, newColumn];
     setColumns(updatedDataColumns);
   };
   const handleGenerateData = () => {
