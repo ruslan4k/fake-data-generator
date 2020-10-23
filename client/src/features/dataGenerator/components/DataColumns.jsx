@@ -8,13 +8,16 @@ import DataColumnItem from './DataColumnItem';
 import { onDragEnd } from '../../../helpers/dndHelpers';
 
 function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
-  const handleChangeDataRow = (event, index, field) => {
+  const handleChangeDataRow = (event, index, field, options = false) => {
     const newValue = event.target.value;
     const updatedDataColumns = columns.slice();
+    const newColumn = { ...updatedDataColumns[index] };
+    updatedDataColumns.splice(index, 1, newColumn);
+    const fieldToUpdate = options ? newColumn.options : newColumn;
     if (field === 'isCustomDomainEnabled') {
-      updatedDataColumns[index][field] = !updatedDataColumns[index][field];
+      fieldToUpdate[field] = !fieldToUpdate[field];
     } else {
-      updatedDataColumns[index][field] = newValue;
+      fieldToUpdate[field] = newValue;
     }
     setColumns(updatedDataColumns);
   };
@@ -34,37 +37,39 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
         <Droppable droppableId="droppable">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {columns.map(({ columnName, columnType, id, isCustomDomainEnabled, customDomain, minValue, maxValue }, index) => (
-                <Draggable draggableId={id} index={index} key={id}>
-                  {(providedTwo) => {
-                    const dragHandleProps = { ...providedTwo.dragHandleProps };
-                    return (
-                      <div ref={providedTwo.innerRef} {...providedTwo.draggableProps}>
-                        <DataColumnItem
-                          key={id}
-                          dragHandleProps={dragHandleProps}
-                          columnName={columnName}
-                          columnType={columnType}
-                          customDomain={customDomain}
-                          minValue={minValue}
-                          maxValue={maxValue}
-                          isCustomDomainEnabled={isCustomDomainEnabled}
-                          handleChangeDataRowColumnName={(event) => handleChangeDataRow(event, index, 'columnName')}
-                          handleChangeDataRowColumnType={(event) => handleChangeDataRow(event, index, 'columnType')}
-                          handleChangeShowCustomDomainField={(event) =>
-                            handleChangeDataRow(event, index, 'isCustomDomainEnabled')
-                          }
-                          handleChangeCustomDomainField={(event) => handleChangeDataRow(event, index, 'customDomain')}
-                          handleDeleteDataRow={() => handleDeleteDataRow(index)}
-                          isDuplicatedColumnName={Boolean(duplicatedColumnNames[columnName])}
-                          handleChangeMinValue={(event) => handleChangeDataRow(event, index, 'minValue')}
-                          handleChangeMaxValue={(event) => handleChangeDataRow(event, index, 'maxValue')}
-                        />
-                      </div>
-                    );
-                  }}
-                </Draggable>
-              ))}
+              {columns.map(
+                ({ columnName, columnType, id, isCustomDomainEnabled, options: { customDomain, minValue, maxValue } }, index) => (
+                  <Draggable draggableId={id} index={index} key={id}>
+                    {(providedTwo) => {
+                      const dragHandleProps = { ...providedTwo.dragHandleProps };
+                      return (
+                        <div ref={providedTwo.innerRef} {...providedTwo.draggableProps}>
+                          <DataColumnItem
+                            key={id}
+                            dragHandleProps={dragHandleProps}
+                            columnName={columnName}
+                            columnType={columnType}
+                            customDomain={customDomain}
+                            minValue={minValue}
+                            maxValue={maxValue}
+                            isCustomDomainEnabled={isCustomDomainEnabled}
+                            handleChangeDataRowColumnName={(event) => handleChangeDataRow(event, index, 'columnName')}
+                            handleChangeDataRowColumnType={(event) => handleChangeDataRow(event, index, 'columnType')}
+                            handleChangeShowCustomDomainField={(event) =>
+                              handleChangeDataRow(event, index, 'isCustomDomainEnabled')
+                            }
+                            handleChangeCustomDomainField={(event) => handleChangeDataRow(event, index, 'customDomain', true)}
+                            handleDeleteDataRow={() => handleDeleteDataRow(index)}
+                            isDuplicatedColumnName={Boolean(duplicatedColumnNames[columnName])}
+                            handleChangeMinValue={(event) => handleChangeDataRow(event, index, 'minValue', true)}
+                            handleChangeMaxValue={(event) => handleChangeDataRow(event, index, 'maxValue', true)}
+                          />
+                        </div>
+                      );
+                    }}
+                  </Draggable>
+                )
+              )}
               {provided.placeholder}
             </div>
           )}

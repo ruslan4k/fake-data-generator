@@ -28,10 +28,10 @@ function DataGeneratorPage() {
   const location = useLocation();
   const { state: locationState } = location;
   const initialColumnsState = [
-    { columnName: 'firstName', columnType: FIRST_NAME, id: uuid() },
-    { columnName: 'lastName', columnType: LAST_NAME, id: uuid() },
-    { columnName: 'email', columnType: EMAIL, id: uuid() },
-    { columnName: 'number', columnType: NUMBER, id: uuid() },
+    { columnName: 'firstName', columnType: FIRST_NAME, id: uuid(), options: {} },
+    { columnName: 'lastName', columnType: LAST_NAME, id: uuid(), options: {} },
+    { columnName: 'email', columnType: EMAIL, id: uuid(), options: {} },
+    { columnName: 'number', columnType: NUMBER, id: uuid(), options: {} },
   ];
   const [columns, setColumns] = useState(initialColumnsState);
   const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
@@ -44,7 +44,7 @@ function DataGeneratorPage() {
     const generationEvent = locationState?.generationEvent;
     if (generationEvent) {
       const { rowsNumber, columns: locationStateColumns } = generationEvent;
-      const newColumns = locationStateColumns.map((column) => ({ ...column, id: uuid() }));
+      const newColumns = locationStateColumns.map((column) => ({ ...column, id: uuid(), options: column.options || {} }));
       setColumnsToGenerateNumber(rowsNumber);
       setColumns(newColumns);
     }
@@ -80,7 +80,7 @@ function DataGeneratorPage() {
   const handleAddColumn = () => {
     const columnsNumber = columns.length;
     const newColumnName = `columnName${columnsNumber + 1}`;
-    const newColumn = { columnName: newColumnName, columnType: FIRST_NAME, id: uuid() };
+    const newColumn = { columnName: newColumnName, columnType: FIRST_NAME, id: uuid(), options: {} };
     const updatedDataColumns = [...columns, newColumn];
     setColumns(updatedDataColumns);
   };

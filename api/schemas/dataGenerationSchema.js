@@ -6,6 +6,7 @@ const { Schema } = mongoose;
 const DataColumnSchema = new Schema({
   columnName: { type: String, required: true },
   columnType: { type: String, required: true, enum: dataTypes.map((data) => data.type) },
+  options: { type: Object },
 });
 
 const dataGenerationSchema = new Schema(

@@ -2,6 +2,10 @@ const LAST_NAME = 'lastName';
 const FIRST_NAME = 'firstName';
 const EMAIL = 'email';
 const UUID = 'uuid';
+const BOOLEAN = 'boolean';
+const NUMBER = 'number';
+const FULL_NAME = 'fullName';
+const USERNAME = 'username';
 
 const dataTypes = [
   {
@@ -13,12 +17,28 @@ const dataTypes = [
     label: 'Last Name',
   },
   {
+    type: FULL_NAME,
+    label: 'Full Name',
+  },
+  {
+    type: USERNAME,
+    label: 'Username',
+  },
+  {
     type: EMAIL,
     label: 'Email',
   },
   {
     type: UUID,
     label: 'UUID',
+  },
+  {
+    type: BOOLEAN,
+    label: 'Boolean',
+  },
+  {
+    type: NUMBER,
+    label: 'Number',
   },
 ];
 
