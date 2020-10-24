@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import { useDispatch } from 'react-redux';
 import { bool, func, node, string } from 'prop-types';
 import * as UserActions from '../../state/user/userActions';
+import { API_URL } from '../../constants/configVariables';
 
 function AuthCardWrapper({ children, handleSubmit, isValid, title, submitButtonLabel }) {
   const dispatch = useDispatch();
@@ -24,35 +25,17 @@ function AuthCardWrapper({ children, handleSubmit, isValid, title, submitButtonL
             <div className="w-200 mt-16">
               <div className="flex flex-col">
                 <div className="mb-4">
-                  <Button
-                    className="w-full"
-                    href="http://localhost:3600/auth/social/google"
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                  >
+                  <Button className="w-full" href={`${API_URL}/auth/social/google`} variant="contained" color="secondary">
                     Login with Google
                   </Button>
                 </div>
                 <div className="mb-4">
-                  <Button
-                    className="w-full"
-                    href="http://localhost:3600/auth/social/github"
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                  >
+                  <Button className="w-full" href={`${API_URL}/auth/social/github`} variant="contained" color="secondary">
                     Login with Github
                   </Button>
                 </div>
                 <div className="mb-4">
-                  <Button
-                    className="w-full"
-                    href="http://localhost:3600/auth/social/facebook"
-                    variant="contained"
-                    color="secondary"
-                    type="submit"
-                  >
+                  <Button className="w-full" href={`${API_URL}/auth/social/facebook`} variant="contained" color="secondary">
                     Login with Facebook
                   </Button>
                 </div>
