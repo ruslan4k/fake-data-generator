@@ -1,7 +1,6 @@
 const config = require('../config');
 
 const {
-  PORT,
   MONGODB_URI,
   SESSION_KEY,
   NODE_ENV,
@@ -11,13 +10,14 @@ const {
   GITHUB_CLIENT_SECRET,
   FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET,
+  NODE_PORT,
 } = process.env;
 const ENV = NODE_ENV;
 
 const { APP_URL, API_URL } = config[ENV];
 
 module.exports = {
-  PORT,
+  NODE_PORT,
   MONGODB_URI,
   SESSION_KEY,
   ENV,

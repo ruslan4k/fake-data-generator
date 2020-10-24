@@ -49,5 +49,5 @@ app.all('*', () => {
 });
 app.use(errorHandler);
 app.listen(PORT, () => {
-  console.log(`Listening at http://localhost:${PORT}`);
+  console.log(`Listening at http://localhost:${NODE_PORT}`);
 });
