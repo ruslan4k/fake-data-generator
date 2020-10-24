@@ -1,7 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
-import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -15,15 +13,8 @@ import * as DataGenerationActions from '../../../state/dataGeneration/dataGenera
 import * as DataGenerationSelectors from '../../../state/dataGeneration/dataGenerationSelectors';
 import * as UserSelectors from '../../../state/user/userSelectors';
 
-const useStyles = makeStyles({
-  container: {
-    width: 360,
-  },
-});
-
 function HistoryPage() {
   const dispatch = useDispatch();
-  const { container } = useStyles();
   const history = useHistory();
   const dataGenerationEventsHistory = useSelector((state) => DataGenerationSelectors.selectDataGenerationEventsHistory(state));
   const isLoggedIn = useSelector((state) => UserSelectors.selectLoggedInStatus(state));
@@ -31,7 +22,7 @@ function HistoryPage() {
     if (isLoggedIn) dispatch(DataGenerationActions.getDataGenerationEventsHistoryRequest());
   }, [dispatch, isLoggedIn]);
   return (
-    <div className={cn(container, 'flex-inline m-auto')}>
+    <div className="flex-inline m-auto max-w-full xs:w-8/12 sm:w-8/12 md:w-6/12 lg:w-4/12">
       {dataGenerationEventsHistory.length > 0 ? (
         dataGenerationEventsHistory.map((event) => (
           <Accordion key={event.createdAt}>

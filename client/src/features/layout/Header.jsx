@@ -49,7 +49,7 @@ function Header() {
   return (
     <>
       <AppBar color="default" className="h-48">
-        <div className="w-full flex justify-between items-center px-16">
+        <div className="w-full flex justify-between items-center px-0 sm:px-16">
           <Tabs
             value={tabIndex}
             indicatorColor="secondary"
@@ -62,20 +62,24 @@ function Header() {
             ))}
           </Tabs>
           {isUserFetched && (
-            <>
+            <div className="mr-8 sm:mr-0">
               {!isLoggedIn ? (
-                <div className="flex ml-auto">
+                <div className="flex ml-auto text-8 sm:text-14">
                   {pathname !== '/signin' && (
                     <div className="ml-16">
                       <Link to="/signin">
-                        <Button variant="outlined">Sign In</Button>
+                        <Button classes={{ label: 'text-8 sm:text-14' }} variant="outlined">
+                          Sign In
+                        </Button>
                       </Link>
                     </div>
                   )}
                   {pathname !== '/signup' && (
-                    <div className="ml-16">
+                    <div className="ml-8">
                       <Link to="/signup">
-                        <Button variant="outlined">Sign Up</Button>
+                        <Button classes={{ label: 'text-8 sm:text-14' }} variant="outlined">
+                          Sign Up
+                        </Button>
                       </Link>
                     </div>
                   )}
@@ -88,7 +92,7 @@ function Header() {
                   </Button>
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
       </AppBar>

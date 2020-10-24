@@ -97,7 +97,7 @@ function DataGeneratorPage() {
   };
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
   return (
-    <div className="p-24">
+    <div className="p-4 sm:p-24">
       <p className="mb-16">Fake Data Generator</p>
       <div className="flex justify-center">
         <div className="w-full md:w-10/12 lg:w-6/12 xl:w-4/12">

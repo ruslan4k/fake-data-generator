@@ -32,7 +32,7 @@ function DataColumnItem({
   return (
     <div className="mb-32">
       <div className="flex justify-center mb-12 w-full">
-        <div className="w-5/12 mr-12">
+        <div className="w-4/12 xs:w-5/12 mr-12">
           <TextField
             label="Column Name"
             className="w-full"
@@ -43,7 +43,7 @@ function DataColumnItem({
             helperText={helperText}
           />
         </div>
-        <div className="w-5/12 mr-12">
+        <div className="w-4/12 xs:w-5/12 mr-12">
           <TextField
             select
             label="Select"
@@ -59,7 +59,7 @@ function DataColumnItem({
             ))}
           </TextField>
         </div>
-        <div className="w-2/12 flex">
+        <div className="w-4/12 xs:w-2/12 flex">
           <div>
             <IconButton className="self-start" aria-label="delete" onClick={handleDeleteDataRow}>
               <DeleteIcon />
