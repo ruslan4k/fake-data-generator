@@ -1,0 +1,34 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_NODE_ENV: ${{secrets.NODE_ENV}}
+          envkey_NODE_PORT: ${{secrets.NODE_PORT}}
+          envkey_MONGODB_URI: ${{secrets.MONGODB_URI}}
+          envkey_SESSION_KEY: ${{secrets.SESSION_KEY}}
+          envkey_GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+          envkey_GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+          envkey_GIT_CLIENT_ID: ${{secrets.GIT_CLIENT_ID}}
+          envkey_GIT_CLIENT_SECRET: ${{secrets.GIT_CLIENT_SECRET}}
+          envkey_FACEBOOK_CLIENT_ID: ${{secrets.FACEBOOK_CLIENT_ID}}
+          envkey_FACEBOOK_CLIENT_SECRET: ${{secrets.FACEBOOK_CLIENT_SECRET}}
+          envkey_PRODUCTION_API_URL: ${{secrets.PRODUCTION_API_URL}}
+          file_name: api/.env
+      - name: Deploy to Google Cloud
+        uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: ${{secrets.GCP_PROJECT_ID}}
+          APPLICATION_CREDENTIALS: ${{secrets.GCP_SA_KEY}}
+        with:
+          args: app deploy api/app.yaml

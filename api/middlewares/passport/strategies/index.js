@@ -8,8 +8,8 @@ const UserService = require('../../../services/userService');
 const { API_URL } = require('../../../constants/envVariables');
 
 const {
-  GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET,
+  GIT_CLIENT_ID,
+  GIT_CLIENT_SECRET,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   FACEBOOK_CLIENT_ID,
@@ -34,8 +34,8 @@ passport.use(
 passport.use(
   new GitHubStrategy(
     {
-      clientID: GITHUB_CLIENT_ID,
-      clientSecret: GITHUB_CLIENT_SECRET,
+      clientID: GIT_CLIENT_ID,
+      clientSecret: GIT_CLIENT_SECRET,
       callbackURL: `${API_URL}/auth/social/github/callback`,
     },
     (accessToken, refreshToken, profile, cb) => socialSignInService.handlePassportSocialSignIn(profile, cb)
