@@ -1,6 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import { string, func, bool, object, number } from 'prop-types';
+import { string, func, bool, object, number, oneOfType } from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -95,6 +95,7 @@ function DataColumnItem({
           <div className="mr-12">
             <TextField
               label="Min Value"
+              type="number"
               variant="outlined"
               value={minValue}
               onChange={handleChangeMinValue}
@@ -103,6 +104,7 @@ function DataColumnItem({
           </div>
           <TextField
             label="Max Value"
+            type="number"
             variant="outlined"
             value={maxValue}
             onChange={handleChangeMaxValue}
@@ -128,8 +130,8 @@ DataColumnItem.propTypes = {
   handleChangeCustomDomainField: func.isRequired,
   handleChangeMinValue: func.isRequired,
   handleChangeMaxValue: func.isRequired,
-  minValue: number,
-  maxValue: number,
+  minValue: oneOfType([number, string]),
+  maxValue: oneOfType([number, string]),
 };
 
 DataColumnItem.defaultProps = {

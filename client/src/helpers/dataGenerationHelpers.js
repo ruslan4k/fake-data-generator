@@ -43,7 +43,7 @@ const generateData = ({ dataType, firstName, lastName, customDomain, minValue = 
       return result;
     }
     case NUMBER: {
-      return Math.floor(Math.random() * (maxValue - minValue + 1) + minValue);
+      return Math.floor(Math.random() * (Number(maxValue) - Number(minValue) + 1) + Number(minValue));
     }
     default:
       return '';
@@ -58,7 +58,11 @@ export const generateRows = (columns, rowsToGenerateNumber) => {
     let firstName;
     let lastName;
     sortedColumns.forEach((columnItem) => {
-      const { columnName, columnType, customDomain, minValue, maxValue } = columnItem;
+      const {
+        columnName,
+        columnType,
+        options: { customDomain, minValue, maxValue },
+      } = columnItem;
       const rowValue = generateData({ dataType: columnType, firstName, lastName, customDomain, minValue, maxValue });
       if (columnType === FIRST_NAME) firstName = rowValue;
       if (columnType === LAST_NAME) lastName = rowValue;
