@@ -23,6 +23,7 @@ jobs:
           envkey_GIT_CLIENT_SECRET: ${{secrets.GIT_CLIENT_SECRET}}
           envkey_FACEBOOK_CLIENT_ID: ${{secrets.FACEBOOK_CLIENT_ID}}
           envkey_FACEBOOK_CLIENT_SECRET: ${{secrets.FACEBOOK_CLIENT_SECRET}}
+          envkey_SENTRY_DSN: ${{secrets.SENTRY_DSN}}
           envkey_API_URL: ${{secrets.API_URL}}
           envkey_APP_URL: ${{secrets.APP_URL}}
           file_name: api/.env

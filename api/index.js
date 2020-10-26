@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const passport = require('passport');
+const Sentry = require('@sentry/node');
 const session = require('./middlewares/session');
 const router = require('./routes');
 const { APP_URL, ENV } = require('./constants/envVariables');
@@ -15,6 +16,15 @@ const errorHandler = require('./middlewares/errorHandler');
 const NotFoundError = require('./constants/errors/notFoundError');
 
 const { NODE_PORT, MONGODB_URI, SESSION_KEY } = require('./constants/envVariables');
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+
+  // We recommend adjusting this value in production, or using tracesSampler
+  // for finer control
+  tracesSampleRate: 1.0,
+  environment: ENV,
+});
 
 (async () => {
   if (!ENV) throw new Error('Please add NODE_ENV to .env');
