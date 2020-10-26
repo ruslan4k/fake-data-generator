@@ -8,8 +8,8 @@ const config = {
     API_URL: 'http://localhost:3600',
   },
   production: {
-    APP_URL: 'https://fakedata.rk-projects.dev',
-    API_URL: 'https://api.fakedata.rk-projects.dev',
+    APP_URL: process.env.APP_URL,
+    API_URL: process.env.API_URL,
   },
 };
 

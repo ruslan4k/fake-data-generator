@@ -6,7 +6,7 @@ const config = {
     API_URL: 'http://localhost:3600',
   },
   production: {
-    API_URL: process.env.REACT_APP_PRODUCTION_API_URL,
+    API_URL: process.env.REACT_APP_API_URL,
   },
 };
 

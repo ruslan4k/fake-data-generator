@@ -1,5 +1,7 @@
 # .env
+
 REACT_APP_ENV=<ENV>
+REACT_APP_API_URL=<REACT_APP_API_URL>
 
 # Before starting projects please:
 
