@@ -18,6 +18,7 @@ function HistoryPage() {
   const dispatch = useDispatch();
   const history = useHistory();
   const dataGenerationEventsHistory = useSelector((state) => DataGenerationSelectors.selectDataGenerationEventsHistory(state));
+  const isHistoryFetched = useSelector((state) => DataGenerationSelectors.selectIsHistoryFetched(state));
   const loadingDataGenerationEventsHistory = useSelector((state) =>
     DataGenerationSelectors.selectLoadingDataGenerationEventsHistory(state)
   );
@@ -25,7 +26,7 @@ function HistoryPage() {
   useEffect(() => {
     if (isLoggedIn) dispatch(DataGenerationActions.getDataGenerationEventsHistoryRequest());
   }, [dispatch, isLoggedIn]);
-  if (loadingDataGenerationEventsHistory) return <CircularProgress />;
+  if (!isHistoryFetched && !dataGenerationEventsHistory.length && loadingDataGenerationEventsHistory) return <CircularProgress />;
   return (
     <div className="flex-inline m-auto max-w-full xs:w-8/12 sm:w-8/12 md:w-6/12 lg:w-4/12">
       {dataGenerationEventsHistory.length > 0 ? (

@@ -23,6 +23,7 @@ export function* generateData({ columns, rowsToGenerateNumber }) {
   try {
     const { generatedData, history } = yield call(DataGenerationRequests.generateData, columns, rowsToGenerateNumber);
     yield put(DataGenerationActions.generateDataRequestSuccess(generatedData, history));
+    yield put(GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }));
   } catch (err) {
     console.log('function*generateData -> err', err);
     yield put(DataGenerationActions.generateDataRequestFailure());

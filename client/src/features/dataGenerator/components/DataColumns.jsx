@@ -15,6 +15,7 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
     updatedDataColumns.splice(index, 1, newColumn);
     const fieldToUpdate = options ? newColumn.options : newColumn;
     if (field === 'isCustomDomainEnabled') {
+      if (fieldToUpdate[field]) fieldToUpdate.customDomain = null;
       fieldToUpdate[field] = !fieldToUpdate[field];
     } else {
       fieldToUpdate[field] = newValue;
@@ -38,7 +39,7 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {columns.map(
-                ({ columnName, columnType, id, isCustomDomainEnabled, options: { customDomain, minValue, maxValue } }, index) => (
+                ({ columnName, columnType, id, options: { customDomain, minValue, maxValue, isCustomDomainEnabled } }, index) => (
                   <Draggable draggableId={id} index={index} key={id}>
                     {(providedTwo) => {
                       const dragHandleProps = { ...providedTwo.dragHandleProps };
@@ -56,7 +57,7 @@ function DataColumns({ setColumns, columns, duplicatedColumnNames }) {
                             handleChangeDataRowColumnName={(event) => handleChangeDataRow(event, index, 'columnName')}
                             handleChangeDataRowColumnType={(event) => handleChangeDataRow(event, index, 'columnType')}
                             handleChangeShowCustomDomainField={(event) =>
-                              handleChangeDataRow(event, index, 'isCustomDomainEnabled')
+                              handleChangeDataRow(event, index, 'isCustomDomainEnabled', true)
                             }
                             handleChangeCustomDomainField={(event) => handleChangeDataRow(event, index, 'customDomain', true)}
                             handleDeleteDataRow={() => handleDeleteDataRow(index)}

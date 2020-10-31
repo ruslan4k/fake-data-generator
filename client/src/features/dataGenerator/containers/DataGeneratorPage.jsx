@@ -9,6 +9,7 @@ import { CSVLink } from 'react-csv';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CircularProgress } from '@material-ui/core';
 import { FIRST_NAME, LAST_NAME, EMAIL, NUMBER } from '../../../constants/dataTypes';
 import OutputBox from '../components/OutputBox';
 import DataColumns from '../components/DataColumns';
@@ -49,6 +50,7 @@ function DataGeneratorPage() {
     columnNamesCounter[columnName] = columnNamesCounter[columnName] ? (duplicatedColumnNames[columnName] = true) : 1;
   });
   const generatedData = useSelector((state) => DataGenerationSelectors.selectGeneratedData(state));
+  const { loadingGeneratedData } = generatedData;
   const isData = Boolean(generatedData.rows.length);
 
   const isDefaultState =
@@ -78,10 +80,8 @@ function DataGeneratorPage() {
     const updatedDataColumns = [...columns, newColumn];
     setColumns(updatedDataColumns);
   };
-  const handleGenerateData = () => {
-    dispatch(DataGenerationActions.generateDataRequest(columns, rowsToGenerateNumber));
-    dispatch(GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }));
-  };
+  const handleGenerateData = () => dispatch(DataGenerationActions.generateDataRequest(columns, rowsToGenerateNumber));
+
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
   return (
     <div className="p-4 sm:p-24">
@@ -116,7 +116,13 @@ function DataGeneratorPage() {
             )}
             <div className="mt-16 flex flex-col justify-between ml-auto">
               <div>
-                <Button size="large" variant="contained" color="primary" onClick={handleGenerateData} disabled={!isValidForm}>
+                <Button
+                  size="large"
+                  variant="contained"
+                  color="primary"
+                  onClick={handleGenerateData}
+                  disabled={!isValidForm || loadingGeneratedData}
+                >
                   Generate Data
                 </Button>
               </div>
@@ -151,7 +157,11 @@ function DataGeneratorPage() {
               )}
             </div>
           </div>
-          <OutputBox generatedDataRows={generatedData.rows} columns={generatedData.columns} />
+          {loadingGeneratedData ? (
+            <CircularProgress size={72} />
+          ) : (
+            <OutputBox generatedDataRows={generatedData.rows} columns={generatedData.columns} />
+          )}
         </div>
       </div>
     </div>

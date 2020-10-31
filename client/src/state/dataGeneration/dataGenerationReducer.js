@@ -21,6 +21,7 @@ const initialGeneratedDataState = {
     { columnName: 'email', columnType: EMAIL, id: uuid(), options: {} },
     { columnName: 'number', columnType: NUMBER, id: uuid(), options: {} },
   ],
+  loadingGeneratedData: false,
 };
 
 // The initial state of the App
@@ -28,6 +29,7 @@ export const initialState = {
   dataGenerationEventsHistory: [],
   loadingDataGenerationEventsHistory: false,
   generatedData: initialGeneratedDataState,
+  isHistoryFetched: false,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -40,22 +42,26 @@ const layoutReducer = (state = initialState, action) =>
         break;
       case GET_DATA_GENERATION_EVENTS_HISTORY_SUCCESS:
         draft.dataGenerationEventsHistory = action.history;
+        draft.isHistoryFetched = true;
         draft.loadingDataGenerationEventsHistory = false;
         break;
       case GET_DATA_GENERATION_EVENTS_HISTORY_FAILURE:
         draft.loadingDataGenerationEventsHistory = false;
         break;
       case GENERATE_DATA_REQUEST:
-        draft.loadingGeneratedRows = true;
+        draft.generatedData.loadingGeneratedData = true;
         break;
       case GENERATE_DATA_SUCCESS:
-        if (action.history) draft.dataGenerationEventsHistory = action.history;
-        draft.loadingGeneratedRows = false;
+        if (action.history) {
+          draft.dataGenerationEventsHistory = action.history;
+          draft.isHistoryFetched = true;
+        }
         draft.generatedData = action.generatedData;
+        draft.generatedData.loadingGeneratedData = false;
         draft.history = action.history;
         break;
       case GENERATE_DATA_FAILURE:
-        draft.loadingGeneratedRows = false;
+        draft.generatedData.loadingGeneratedData = false;
         break;
       case RESET_GENERATED_DATA:
         draft.generatedData = initialGeneratedDataState;
