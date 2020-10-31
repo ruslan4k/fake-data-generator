@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
+import React, { memo } from 'react';
 import { func, array, object } from 'prop-types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -88,4 +88,4 @@ DataColumns.propTypes = {
   duplicatedColumnNames: object.isRequired,
 };
 
-export default DataColumns;
+export default memo(DataColumns);

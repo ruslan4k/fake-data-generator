@@ -1,5 +1,5 @@
 import { array } from 'prop-types';
-import React from 'react';
+import React, { memo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -88,4 +88,4 @@ OutputBox.propTypes = {
   columns: array.isRequired,
 };
 
-export default OutputBox;
+export default memo(OutputBox);

@@ -33,8 +33,43 @@ function DataGeneratorPage() {
   ];
   const [columns, setColumns] = useState(initialColumnsState);
   const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
-  const duplicatedColumnNames = {};
-  const columnNamesCounter = {};
+  const generatedData = useSelector((state) => DataGenerationSelectors.selectGeneratedData(state));
+  const { loadingGeneratedData } = generatedData;
+  const isData = Boolean(generatedData.rows.length);
+  const [CopyToClipboardComponent, setCopyToClipboard] = useState();
+  const [duplicatedColumnNames, setDuplicatedColumnNames] = useState({});
+  const [CsvDownloadComponent, setCsvDownloadComponent] = useState(null);
+  const [isDefaultState, setDefaultState] = useState(false);
+  const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
+  useEffect(() => {
+    setCsvDownloadComponent(
+      <CSVLink data={generatedData.rows} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
+        <Button variant="contained" color="secondary" disabled={!isValidForm} className="w-full">
+          Download CSV
+        </Button>
+      </CSVLink>
+    );
+    setCopyToClipboard(
+      <CopyToClipboard text={JSON.stringify(generatedData.rows)}>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={!isValidForm}
+          className="w-full"
+          onClick={() =>
+            dispatch(
+              GlobalActions.showSnackbarMessage({
+                message: 'Copied',
+                type: SNACKBAR_TYPES.SUCCESS,
+              })
+            )
+          }
+        >
+          Copy Rows (JSON)
+        </Button>
+      </CopyToClipboard>
+    );
+  }, [generatedData.rows]);
 
   useEffect(() => {
     const generationEvent = locationState?.generationEvent;
@@ -46,20 +81,29 @@ function DataGeneratorPage() {
     }
   }, [locationState]);
 
-  columns.forEach(({ columnName }) => {
-    columnNamesCounter[columnName] = columnNamesCounter[columnName] ? (duplicatedColumnNames[columnName] = true) : 1;
-  });
-  const generatedData = useSelector((state) => DataGenerationSelectors.selectGeneratedData(state));
-  const { loadingGeneratedData } = generatedData;
-  const isData = Boolean(generatedData.rows.length);
+  useEffect(() => {
+    const updatedDuplicatedColumnsValue = {};
+    const updatedColumnNamesCounter = {};
+    columns.forEach(({ columnName }) => {
+      if (updatedColumnNamesCounter[columnName]) {
+        updatedDuplicatedColumnsValue[columnName] = true;
+      } else {
+        updatedColumnNamesCounter[columnName] = 1;
+      }
+    });
+    setDuplicatedColumnNames(updatedDuplicatedColumnsValue);
+  }, [columns]);
 
-  const isDefaultState =
-    !isData &&
-    isEqual(
-      initialColumnsState.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
-      columns.map((col) => ({ columnName: col.columnName, columnType: col.columnType }))
-    ) &&
-    isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER);
+  useEffect(() => {
+    setDefaultState(
+      !isData &&
+        isEqual(
+          initialColumnsState.map((col) => ({ columnName: col.columnName, columnType: col.columnType })),
+          columns.map((col) => ({ columnName: col.columnName, columnType: col.columnType }))
+        ) &&
+        isEqual(rowsToGenerateNumber, DEFAULT_ROWS_NUMBER)
+    );
+  }, [columns, rowsToGenerateNumber]);
 
   const handleResetToDefault = () => {
     setColumns(initialColumnsState);
@@ -82,7 +126,6 @@ function DataGeneratorPage() {
   };
   const handleGenerateData = () => dispatch(DataGenerationActions.generateDataRequest(columns, rowsToGenerateNumber));
 
-  const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
   return (
     <div className="p-4 sm:p-24">
       <p className="mb-16">Fake Data Generator</p>
@@ -110,7 +153,7 @@ function DataGeneratorPage() {
             {!isDefaultState && (
               <div className="mt-16">
                 <Button variant="outlined" onClick={handleResetToDefault}>
-                  Reset To Default
+                  Reset To DefaultF
                 </Button>
               </div>
             )}
@@ -128,31 +171,8 @@ function DataGeneratorPage() {
               </div>
               {isData && (
                 <div className="flex flex-col">
-                  <CSVLink data={generatedData.rows} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
-                    <Button variant="contained" color="secondary" disabled={!isValidForm} className="w-full">
-                      Download CSV
-                    </Button>
-                  </CSVLink>
-                  <div>
-                    <CopyToClipboard text={JSON.stringify(generatedData.rows)}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        disabled={!isValidForm}
-                        className="w-full"
-                        onClick={() =>
-                          dispatch(
-                            GlobalActions.showSnackbarMessage({
-                              message: 'Copied',
-                              type: SNACKBAR_TYPES.SUCCESS,
-                            })
-                          )
-                        }
-                      >
-                        Copy Rows (JSON)
-                      </Button>
-                    </CopyToClipboard>
-                  </div>
+                  {CsvDownloadComponent}
+                  <div>{CopyToClipboardComponent}</div>
                 </div>
               )}
             </div>
