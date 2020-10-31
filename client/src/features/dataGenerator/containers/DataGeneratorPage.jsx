@@ -14,12 +14,9 @@ import OutputBox from '../components/OutputBox';
 import DataColumns from '../components/DataColumns';
 
 import { SNACKBAR_TYPES } from '../../../constants/snackbarConstants';
-import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
 import * as GlobalActions from '../../../state/global/globalActions';
 import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
-import * as UserSelectors from '../../../state/user/userSelectors';
-
-import { generateRows } from '../../../helpers/dataGenerationHelpers';
+import * as DataGenerationSelectors from '../../../state/dataGeneration/dataGenerationSelectors';
 
 const DEFAULT_ROWS_NUMBER = 100;
 
@@ -35,8 +32,6 @@ function DataGeneratorPage() {
   ];
   const [columns, setColumns] = useState(initialColumnsState);
   const [rowsToGenerateNumber, setColumnsToGenerateNumber] = useState(DEFAULT_ROWS_NUMBER);
-  const initialGeneratedDataState = { columns: initialColumnsState, rows: [], csvRows: [] };
-  const [generatedData, setGeneratedDataRows] = useState(initialGeneratedDataState);
   const duplicatedColumnNames = {};
   const columnNamesCounter = {};
 
@@ -53,7 +48,7 @@ function DataGeneratorPage() {
   columns.forEach(({ columnName }) => {
     columnNamesCounter[columnName] = columnNamesCounter[columnName] ? (duplicatedColumnNames[columnName] = true) : 1;
   });
-
+  const generatedData = useSelector((state) => DataGenerationSelectors.selectGeneratedData(state));
   const isData = Boolean(generatedData.rows.length);
 
   const isDefaultState =
@@ -67,7 +62,7 @@ function DataGeneratorPage() {
   const handleResetToDefault = () => {
     setColumns(initialColumnsState);
     setColumnsToGenerateNumber(DEFAULT_ROWS_NUMBER);
-    setGeneratedDataRows(initialGeneratedDataState);
+    dispatch(DataGenerationActions.resetGeneratedData());
     dispatch(
       GlobalActions.showSnackbarMessage({ message: 'Settings successfully reset to default!', type: SNACKBAR_TYPES.SUCCESS })
     );
@@ -76,7 +71,6 @@ function DataGeneratorPage() {
   const handleColumnsToGenerateNumber = (e) => {
     setColumnsToGenerateNumber(e.target.value);
   };
-  const isLoggedIn = useSelector((state) => UserSelectors.selectLoggedInStatus(state));
   const handleAddColumn = () => {
     const columnsNumber = columns.length;
     const newColumnName = `columnName${columnsNumber + 1}`;
@@ -85,14 +79,7 @@ function DataGeneratorPage() {
     setColumns(updatedDataColumns);
   };
   const handleGenerateData = () => {
-    const generatedRows = generateRows(columns, rowsToGenerateNumber);
-    const csvRows = generatedRows.map(({ [DEFAULT_KEY_NAME]: defaultKeyName, ...otherFields }) => otherFields);
-    const generationEvent = {
-      columns,
-      rowsToGenerateNumber,
-    };
-    if (isLoggedIn) dispatch(DataGenerationActions.saveDataGenerationEventRequest(generationEvent));
-    setGeneratedDataRows({ rows: generatedRows, columns, csvRows });
+    dispatch(DataGenerationActions.generateDataRequest(columns, rowsToGenerateNumber));
     dispatch(GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }));
   };
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
@@ -135,7 +122,7 @@ function DataGeneratorPage() {
               </div>
               {isData && (
                 <div className="flex flex-col">
-                  <CSVLink data={generatedData.csvRows} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
+                  <CSVLink data={generatedData.rows} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
                     <Button variant="contained" color="secondary" disabled={!isValidForm} className="w-full">
                       Download CSV
                     </Button>

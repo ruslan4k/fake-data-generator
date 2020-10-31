@@ -11860,4 +11860,4 @@ const rows = [
   'Zysk',
 ];
 
-export default rows;
+module.exports = rows;

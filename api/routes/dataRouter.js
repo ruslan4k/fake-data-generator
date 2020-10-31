@@ -9,4 +9,6 @@ router
   .get(requireAuthentication, dataController.getHistory)
   .post(requireAuthentication, dataController.addDataGenerationToHistory);
 
+router.route('/generate').post(dataController.generateData);
+
 module.exports = router;

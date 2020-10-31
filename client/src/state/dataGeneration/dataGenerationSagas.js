@@ -19,17 +19,17 @@ export function* getDataGenerationEventsHistory() {
   }
 }
 
-export function* saveDataGenerationEvent(setup) {
+export function* generateData({ columns, rowsToGenerateNumber }) {
   try {
-    const { history } = yield call(DataGenerationRequests.saveDataGenerationEvent, setup);
-    yield put(DataGenerationActions.saveDataGenerationEventSuccess(history));
+    const { generatedData, history } = yield call(DataGenerationRequests.generateData, columns, rowsToGenerateNumber);
+    yield put(DataGenerationActions.generateDataRequestSuccess(generatedData, history));
   } catch (err) {
-    console.log('function*saveDataGenerationEvent -> err', err);
-    yield put(DataGenerationActions.saveDataGenerationEventFailure());
+    console.log('function*generateData -> err', err);
+    yield put(DataGenerationActions.generateDataRequestFailure());
   }
 }
 
 export default function* () {
   yield takeEvery(DataGenerationConstants.GET_DATA_GENERATION_EVENTS_HISTORY_REQUEST, getDataGenerationEventsHistory);
-  yield takeEvery(DataGenerationConstants.SAVE_DATA_GENERATION_EVENT_REQUEST, saveDataGenerationEvent);
+  yield takeEvery(DataGenerationConstants.GENERATE_DATA_REQUEST, generateData);
 }

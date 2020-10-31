@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const dataTypes = require('../constants/dataTypes');
+const { dataTypes } = require('../constants/dataTypes');
 
 const { Schema } = mongoose;
 

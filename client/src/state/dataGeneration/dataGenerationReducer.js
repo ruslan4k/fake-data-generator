@@ -1,19 +1,33 @@
 import produce from 'immer';
+import { v4 as uuid } from 'uuid';
 import {
   GET_DATA_GENERATION_EVENTS_HISTORY_FAILURE,
   GET_DATA_GENERATION_EVENTS_HISTORY_SUCCESS,
   GET_DATA_GENERATION_EVENTS_HISTORY_REQUEST,
-  SAVE_DATA_GENERATION_EVENT_REQUEST,
-  SAVE_DATA_GENERATION_EVENT_SUCCESS,
-  SAVE_DATA_GENERATION_EVENT_FAILURE,
+  GENERATE_DATA_FAILURE,
+  GENERATE_DATA_REQUEST,
+  GENERATE_DATA_SUCCESS,
+  RESET_GENERATED_DATA,
 } from './dataGenerationConstants';
 import { LOGOUT_SUCCESS } from '../user/userConstants';
+
+import { FIRST_NAME, LAST_NAME, EMAIL, NUMBER } from '../../constants/dataTypes';
+
+const initialGeneratedDataState = {
+  rows: [],
+  columns: [
+    { columnName: 'firstName', columnType: FIRST_NAME, id: uuid(), options: {} },
+    { columnName: 'lastName', columnType: LAST_NAME, id: uuid(), options: {} },
+    { columnName: 'email', columnType: EMAIL, id: uuid(), options: {} },
+    { columnName: 'number', columnType: NUMBER, id: uuid(), options: {} },
+  ],
+};
 
 // The initial state of the App
 export const initialState = {
   dataGenerationEventsHistory: [],
   loadingDataGenerationEventsHistory: false,
-  loadingSaveDataGenerationEvent: false,
+  generatedData: initialGeneratedDataState,
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -31,15 +45,20 @@ const layoutReducer = (state = initialState, action) =>
       case GET_DATA_GENERATION_EVENTS_HISTORY_FAILURE:
         draft.loadingDataGenerationEventsHistory = false;
         break;
-      case SAVE_DATA_GENERATION_EVENT_REQUEST:
-        draft.loadingSaveDataGenerationEvent = true;
+      case GENERATE_DATA_REQUEST:
+        draft.loadingGeneratedRows = true;
         break;
-      case SAVE_DATA_GENERATION_EVENT_SUCCESS:
+      case GENERATE_DATA_SUCCESS:
         if (action.history) draft.dataGenerationEventsHistory = action.history;
-        draft.loadingSaveDataGenerationEvent = false;
+        draft.loadingGeneratedRows = false;
+        draft.generatedData = action.generatedData;
+        draft.history = action.history;
         break;
-      case SAVE_DATA_GENERATION_EVENT_FAILURE:
-        draft.loadingSaveDataGenerationEvent = false;
+      case GENERATE_DATA_FAILURE:
+        draft.loadingGeneratedRows = false;
+        break;
+      case RESET_GENERATED_DATA:
+        draft.generatedData = initialGeneratedDataState;
         break;
       case LOGOUT_SUCCESS:
         return initialState;

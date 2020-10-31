@@ -4946,5 +4946,4 @@ const rows = [
   'Zulema',
   'Zuzana',
 ];
-
-export default rows;
+module.exports = rows;

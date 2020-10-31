@@ -42,4 +42,4 @@ const dataTypes = [
   },
 ];
 
-module.exports = dataTypes;
+module.exports = { dataTypes, LAST_NAME, FIRST_NAME, EMAIL, UUID, BOOLEAN, NUMBER, FULL_NAME, USERNAME };
