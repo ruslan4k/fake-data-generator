@@ -26,7 +26,11 @@ const initialGeneratedDataState = {
 
 // The initial state of the App
 export const initialState = {
-  dataGenerationEventsHistory: [],
+  dataGenerationEventsHistory: {
+    items: [],
+    itemsCount: 0,
+    limit: 10,
+  },
   loadingDataGenerationEventsHistory: false,
   generatedData: initialGeneratedDataState,
   isHistoryFetched: false,

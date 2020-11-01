@@ -6,7 +6,9 @@ const DataService = require('../services/dataService');
 const getHistory = async (req, res, next) => {
   try {
     const { user } = req;
-    const history = await DataService.getHistoryByUserId(user._id);
+    const { page = 0 } = req.query;
+    const history = await DataService.getHistoryByUserId(user._id, page);
+
     return res.send({ history });
   } catch (err) {
     return next(err);
@@ -30,7 +32,7 @@ const generateData = async (req, res, next) => {
     const { user } = req;
     const { columns, rowsToGenerateNumber } = req.body;
     const rows = DataService.generateRows(columns, rowsToGenerateNumber);
-    let history = null;
+    let history = { items: [], itemsCount: 0 };
     if (user) {
       await DataService.saveDataGenerationEvent({ userId: user._id, columns, rowsToGenerateNumber });
       history = await DataService.getHistoryByUserId(user._id);

@@ -10,9 +10,11 @@ import {
 
 // eslint-disable-next-line import/prefer-default-export
 
-export function getDataGenerationEventsHistoryRequest() {
+export function getDataGenerationEventsHistoryRequest(page, callback) {
   return {
     type: GET_DATA_GENERATION_EVENTS_HISTORY_REQUEST,
+    page,
+    callback,
   };
 }
 

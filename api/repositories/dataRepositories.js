@@ -1,6 +1,27 @@
+const mongoose = require('mongoose');
+
 const DataGeneration = require('../schemas/dataGenerationSchema');
 
-const getHistoryByUserId = (id) => DataGeneration.find({ userId: id }).sort({ createdAt: -1 });
+const getHistoryByUserId = async (id, limit, offset) => {
+  const { items, itemsCount: itemsCountQueryResult } = (
+    await DataGeneration.aggregate([
+      {
+        $facet: {
+          items: [
+            { $match: { userId: mongoose.Types.ObjectId(id) } },
+            { $skip: offset },
+            { $limit: limit },
+            { $sort: { createdAt: -1 } },
+          ],
+          itemsCount: [{ $match: { userId: mongoose.Types.ObjectId(id) } }, { $count: 'count' }],
+        },
+      },
+    ])
+  )[0];
+  const itemsCount = itemsCountQueryResult[0].count;
+  return { items, itemsCount };
+};
+
 const saveDataGenerationEvent = ({ userId, columns, rowsToGenerateNumber }) => {
   const dataGenerationEvent = new DataGeneration({ userId, columns, rowsNumber: rowsToGenerateNumber });
   return dataGenerationEvent.save();

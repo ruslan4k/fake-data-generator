@@ -8,7 +8,12 @@ const emailDomainsArray = require('../constants/data/emailDomains');
 const { LAST_NAME, FIRST_NAME, EMAIL, UUID, BOOLEAN, NUMBER, FULL_NAME, USERNAME } = require('../constants/dataTypes');
 const { DEFAULT_KEY_NAME, MIN_VALUE, MAX_VALUE } = require('../constants/dataGenerationConstants');
 
-const getHistoryByUserId = async (id) => DataRepository.getHistoryByUserId(id);
+const getHistoryByUserId = async (id, page) => {
+  const limit = 10;
+  const offset = (Number(page) - 1) * limit;
+  const { items, itemsCount } = await DataRepository.getHistoryByUserId(id, limit, offset);
+  return { items, itemsCount, limit };
+};
 const saveDataGenerationEvent = async ({ userId, columns, rowsToGenerateNumber }) =>
   DataRepository.saveDataGenerationEvent({ userId, columns, rowsToGenerateNumber });
 

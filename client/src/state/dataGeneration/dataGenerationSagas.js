@@ -7,10 +7,11 @@ import * as GlobalActions from '../global/globalActions';
 import { SNACKBAR_TYPES } from '../../constants/snackbarConstants';
 import { formatErrorMessage } from '../../helpers/errorsHelpers';
 
-export function* getDataGenerationEventsHistory() {
+export function* getDataGenerationEventsHistory({ page, callback }) {
   try {
-    const { history } = yield call(DataGenerationRequests.getDataGenerationEventsHistory);
+    const { history } = yield call(DataGenerationRequests.getDataGenerationEventsHistory, page);
     yield put(DataGenerationActions.getDataGenerationEventsHistorySuccess(history));
+    if (callback) callback();
   } catch (err) {
     console.log('function*getDataGenerationEventsHistory -> err', err);
     const message = formatErrorMessage(err);
