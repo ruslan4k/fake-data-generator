@@ -9,9 +9,9 @@ const getHistoryByUserId = async (id, limit, offset) => {
         $facet: {
           items: [
             { $match: { userId: mongoose.Types.ObjectId(id) } },
+            { $sort: { createdAt: -1 } },
             { $skip: offset },
             { $limit: limit },
-            { $sort: { createdAt: -1 } },
           ],
           itemsCount: [{ $match: { userId: mongoose.Types.ObjectId(id) } }, { $count: 'count' }],
         },

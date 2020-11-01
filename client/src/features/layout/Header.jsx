@@ -86,7 +86,7 @@ function Header() {
                 </div>
               ) : (
                 <div className="flex items-center ml-auto">
-                  <div className="mr-8 text-14">{user.name}</div>
+                  <div className="text-14 hidden sm:block mr-16">{user.name}</div>
                   <Button variant="contained" onClick={handleLogoutUser}>
                     Logout
                   </Button>

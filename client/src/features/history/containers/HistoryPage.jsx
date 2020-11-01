@@ -13,9 +13,17 @@ import dayjs from 'dayjs';
 import { CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
-import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
-import * as DataGenerationSelectors from '../../../state/dataGeneration/dataGenerationSelectors';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 import * as UserSelectors from '../../../state/user/userSelectors';
+import * as DataGenerationSelectors from '../../../state/dataGeneration/dataGenerationSelectors';
+import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,12 +54,12 @@ function HistoryPage() {
 
   const handleChangePage = (event, value) => {
     const callback = () => setPage(value);
-    if (isLoggedIn) dispatch(DataGenerationActions.getDataGenerationEventsHistoryRequest(value, callback));
+    if (isLoggedIn && page !== value) dispatch(DataGenerationActions.getDataGenerationEventsHistoryRequest(value, callback));
   };
   const isHistoryFetched = useSelector((state) => DataGenerationSelectors.selectIsHistoryFetched(state));
 
   return (
-    <div className="flex-inline m-auto max-w-full xs:w-8/12 sm:w-8/12 md:w-6/12 lg:w-4/12">
+    <div className="flex-inline m-auto max-w-full sm:w-8/12 md:w-6/12 lg:w-4/12">
       {loadingDataGenerationEventsHistory && <CircularProgress />}
       {items.length > 0 && (
         <>
@@ -67,6 +75,7 @@ function HistoryPage() {
                     </Typography>
                   </div>
                   <Button
+                    className="flex-none self-center"
                     onClick={() => history.push({ pathname: '/', state: { generationEvent: event } })}
                     variant="contained"
                     color="secondary"
@@ -77,18 +86,26 @@ function HistoryPage() {
               </AccordionSummary>
               <AccordionDetails>
                 <div className="flex items-center flex-col w-full">
-                  {event.columns.map((columnItem) => (
-                    <div key={`${columnItem.columnType}${columnItem.columnName}`} className="flex">
-                      <Typography>
-                        Column Name:
-                        {columnItem.columnName}
-                      </Typography>
-                      <Typography>
-                        Column Type:
-                        {columnItem.columnType}
-                      </Typography>
-                    </div>
-                  ))}
+                  <TableContainer component={Paper}>
+                    <Table className={classes.table} size="small" aria-label="a dense table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="left">Column Name</TableCell>
+                          <TableCell align="left">Column Type</TableCell>
+                          <TableCell align="left">Options</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {event.columns.map((columnItem) => (
+                          <TableRow key={columnItem.columnName}>
+                            <TableCell align="left">{columnItem.columnName}</TableCell>
+                            <TableCell align="left">{columnItem.columnType}</TableCell>
+                            <TableCell align="left">{JSON.stringify(columnItem.options)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </div>
               </AccordionDetails>
             </Accordion>
