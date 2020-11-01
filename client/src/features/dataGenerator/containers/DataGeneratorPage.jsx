@@ -18,6 +18,7 @@ import { SNACKBAR_TYPES } from '../../../constants/snackbarConstants';
 import * as GlobalActions from '../../../state/global/globalActions';
 import * as DataGenerationActions from '../../../state/dataGeneration/dataGenerationActions';
 import * as DataGenerationSelectors from '../../../state/dataGeneration/dataGenerationSelectors';
+import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
 
 const DEFAULT_ROWS_NUMBER = 100;
 
@@ -42,15 +43,20 @@ function DataGeneratorPage() {
   const [isDefaultState, setDefaultState] = useState(false);
   const isValidForm = Object.keys(duplicatedColumnNames).length === 0;
   useEffect(() => {
+    const rowsWithoutKey = generatedData.rows.map((rowItem) => {
+      const { [DEFAULT_KEY_NAME]: keyProperty, ...rest } = rowItem;
+      return rest;
+    });
+
     setCsvDownloadComponent(
-      <CSVLink data={generatedData.rows} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
+      <CSVLink data={rowsWithoutKey} filename={`Generated Data - ${rowsToGenerateNumber} rows.csv`}>
         <Button variant="contained" color="secondary" disabled={!isValidForm} className="w-full">
           Download CSV
         </Button>
       </CSVLink>
     );
     setCopyToClipboard(
-      <CopyToClipboard text={JSON.stringify(generatedData.rows)}>
+      <CopyToClipboard text={JSON.stringify(rowsWithoutKey)}>
         <Button
           variant="contained"
           color="primary"
