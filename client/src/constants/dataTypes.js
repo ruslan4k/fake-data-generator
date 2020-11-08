@@ -6,6 +6,7 @@ export const BOOLEAN = 'boolean';
 export const NUMBER = 'number';
 export const FULL_NAME = 'fullName';
 export const USERNAME = 'username';
+export const DOMAIN = 'domain';
 
 const dataTypes = [
   {
@@ -31,6 +32,11 @@ const dataTypes = [
   {
     type: EMAIL,
     label: 'Email',
+    order: 1,
+  },
+  {
+    type: DOMAIN,
+    label: 'Domain',
     order: 1,
   },
   {

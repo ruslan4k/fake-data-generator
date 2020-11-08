@@ -6,6 +6,7 @@ const BOOLEAN = 'boolean';
 const NUMBER = 'number';
 const FULL_NAME = 'fullName';
 const USERNAME = 'username';
+const DOMAIN = 'domain';
 
 const dataTypes = [
   {
@@ -40,6 +41,10 @@ const dataTypes = [
     type: NUMBER,
     label: 'Number',
   },
+  {
+    type: DOMAIN,
+    label: 'domain',
+  },
 ];
 
-module.exports = { dataTypes, LAST_NAME, FIRST_NAME, EMAIL, UUID, BOOLEAN, NUMBER, FULL_NAME, USERNAME };
+module.exports = { dataTypes, LAST_NAME, FIRST_NAME, EMAIL, UUID, BOOLEAN, NUMBER, FULL_NAME, USERNAME, DOMAIN };

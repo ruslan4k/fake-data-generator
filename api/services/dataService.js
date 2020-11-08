@@ -5,7 +5,7 @@ const DataRepository = require('../repositories/dataRepositories');
 const lastNamesArray = require('../constants/data/lastNames');
 const firstNamesArray = require('../constants/data/firstNames');
 const emailDomainsArray = require('../constants/data/emailDomains');
-const { LAST_NAME, FIRST_NAME, EMAIL, UUID, BOOLEAN, NUMBER, FULL_NAME, USERNAME } = require('../constants/dataTypes');
+const { LAST_NAME, FIRST_NAME, EMAIL, UUID, BOOLEAN, NUMBER, FULL_NAME, USERNAME, DOMAIN } = require('../constants/dataTypes');
 const { DEFAULT_KEY_NAME, MIN_VALUE, MAX_VALUE } = require('../constants/dataGenerationConstants');
 
 const getHistoryByUserId = async (id, page) => {
@@ -64,6 +64,9 @@ const generateData = ({ dataType, firstName, lastName, customDomain, minValue = 
     }
     case NUMBER: {
       return Math.floor(Math.random() * (Number(maxValue) - Number(minValue) + 1) + Number(minValue));
+    }
+    case DOMAIN: {
+      return generateRandomEmailDomain();
     }
     default:
       return '';

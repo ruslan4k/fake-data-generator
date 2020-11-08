@@ -58,7 +58,7 @@ const layoutReducer = (state = initialState, action) =>
       case GENERATE_DATA_SUCCESS:
         if (action.history) {
           draft.dataGenerationEventsHistory = action.history;
-          draft.isHistoryFetched = true;
+          if (action.history.length) draft.isHistoryFetched = true;
         }
         draft.generatedData = action.generatedData;
         draft.generatedData.loadingGeneratedData = false;
