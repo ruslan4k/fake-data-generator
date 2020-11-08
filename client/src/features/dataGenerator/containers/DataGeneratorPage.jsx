@@ -159,7 +159,7 @@ function DataGeneratorPage() {
             {!isDefaultState && (
               <div className="mt-16">
                 <Button variant="outlined" onClick={handleResetToDefault}>
-                  Reset To DefaultF
+                  Reset To Default
                 </Button>
               </div>
             )}

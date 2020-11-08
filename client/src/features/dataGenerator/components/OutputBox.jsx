@@ -1,5 +1,5 @@
 import { array } from 'prop-types';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -9,6 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { DEFAULT_KEY_NAME } from '../../../constants/dataGenerationConstants';
 
@@ -26,6 +27,12 @@ function OutputBox({ generatedDataRows, columns }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  useEffect(() => {
+    // eslint-disable-next-line no-undef
+    const outputBoxNode = window.document.getElementById('outputBox');
+    scrollIntoView(outputBoxNode, { behavior: 'smooth', scrollMode: 'if-needed' });
+  }, [generatedDataRows]);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -40,7 +47,7 @@ function OutputBox({ generatedDataRows, columns }) {
   const currentTableRows = generatedDataRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <div className="mt-20 max-w-full">
+    <div className="mt-20 max-w-full" id="outputBox">
       {isResult && (
         <Paper elevation={3} classes={{ root: classes.root }}>
           <TableContainer className={classes.container}>
