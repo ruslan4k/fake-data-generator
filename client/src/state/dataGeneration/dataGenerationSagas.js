@@ -27,6 +27,8 @@ export function* generateData({ columns, rowsToGenerateNumber }) {
     yield put(GlobalActions.showSnackbarMessage({ message: 'Data successfully generated!', type: SNACKBAR_TYPES.SUCCESS }));
   } catch (err) {
     console.log('function*generateData -> err', err);
+    const message = formatErrorMessage(err);
+    yield put(GlobalActions.showSnackbarMessage({ message, type: SNACKBAR_TYPES.ERROR }));
     yield put(DataGenerationActions.generateDataRequestFailure());
   }
 }
