@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
+import * as Sentry from '@sentry/react';
 import { ConnectedRouter } from 'connected-react-router';
 import ReactGA from 'react-ga';
 import Routes from './features/Routes';
@@ -15,6 +16,7 @@ function App() {
   useEffect(() => {
     ReactGA.initialize('UA-181214830-1');
     ReactGA.pageview(window.location.pathname + window.location.search);
+    Sentry.captureMessage('Page Load', 'info');
   }, []);
   const initialState = {};
   const store = configureStore(initialState, history);
