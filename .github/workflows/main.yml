@@ -27,6 +27,14 @@ jobs:
           envkey_API_URL: ${{secrets.API_URL}}
           envkey_APP_URL: ${{secrets.APP_URL}}
           file_name: api/.env
+      - name: Install dependencies
+        run: npm install
+        shell: bash
+        working-directory: api
+      - name: Run test cases
+        run: npm run test:ci
+        shell: bash
+        working-directory: api
       - name: Deploy to Google Cloud
         uses: actions-hub/gcloud@master
         env:

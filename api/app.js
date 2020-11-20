@@ -8,7 +8,6 @@ const Tracing = require('@sentry/tracing');
 const { APP_URL, ENV } = require('./constants/envVariables');
 const session = require('./middlewares/session');
 const router = require('./routes');
-const { NODE_PORT } = require('./constants/envVariables');
 
 const errorHandler = require('./middlewares/errorHandler');
 
@@ -53,11 +52,5 @@ app.all('*', () => {
 });
 app.use(Sentry.Handlers.errorHandler());
 app.use(errorHandler);
-
-const PORT = NODE_PORT || 3600;
-
-app.listen(PORT, () => {
-  console.log(`Listening at http://localhost:${NODE_PORT}`);
-});
 
 module.exports = { app };

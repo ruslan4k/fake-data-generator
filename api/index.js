@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 require('dotenv').config();
 require('./middlewares/passport');
-require('./app');
 const mongoose = require('mongoose');
+const { app } = require('./app');
+const { NODE_PORT } = require('./constants/envVariables');
 
 const { ENV } = require('./constants/envVariables');
 
@@ -19,3 +20,9 @@ const { MONGODB_URI, SESSION_KEY } = require('./constants/envVariables');
   });
   console.log('Successfully connected to MongoDB instance');
 })();
+
+const PORT = NODE_PORT || 3600;
+
+app.listen(PORT, () => {
+  console.log(`Listening at http://localhost:${NODE_PORT}`);
+});
