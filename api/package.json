@@ -4,9 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
-    "lint": "eslint --fix --ext .js,.jsx ."
+    "lint": "eslint --fix --ext .js,.jsx .",
+    "test": "jest --watchAll --no-cache",
+    "test:ci": "jest"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./test/setup.js"
+    ]
   },
   "author": "",
   "license": "ISC",
@@ -34,10 +41,13 @@
   "devDependencies": {
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.13.0",
     "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.6.3",
+    "mongodb-memory-server": "^6.9.2",
     "nodemon": "^2.0.4",
     "prettier-eslint": "^11.0.0",
-    "eslint-config-prettier": "^6.13.0",
-    "eslint-plugin-prettier": "^3.1.4"
+    "supertest": "^6.0.1"
   }
 }

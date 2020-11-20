@@ -1,4 +1,7 @@
 {
+  "env": {
+    "jest": true
+  },
   "rules": {
     "no-underscore-dangle": "off",
     "implicit-arrow-linebreak": "off",

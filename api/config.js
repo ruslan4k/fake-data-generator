@@ -1,4 +1,8 @@
 const config = {
+  test: {
+    APP_URL: 'http://localhost:3000',
+    API_URL: 'http://localhost:3600',
+  },
   local: {
     APP_URL: 'http://localhost:3000',
     API_URL: 'http://localhost:3600',
