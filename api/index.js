@@ -4,6 +4,7 @@ require('./middlewares/passport');
 const mongoose = require('mongoose');
 const { app } = require('./app');
 const { NODE_PORT } = require('./constants/envVariables');
+const { logger } = require('./logger');
 
 const { ENV } = require('./constants/envVariables');
 
@@ -18,11 +19,11 @@ const { MONGODB_URI, SESSION_KEY } = require('./constants/envVariables');
     useUnifiedTopology: true,
     useCreateIndex: true,
   });
-  console.log('Successfully connected to MongoDB instance');
+  logger.info('Successfully connected to MongoDB instance');
 })();
 
 const PORT = NODE_PORT || 3600;
 
 app.listen(PORT, () => {
-  console.log(`Listening at http://localhost:${NODE_PORT}`);
+  logger.info(`Listening at http://localhost:${NODE_PORT}`);
 });

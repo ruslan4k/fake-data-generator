@@ -1,3 +1,4 @@
+const { development } = require('../config');
 const config = require('../config');
 
 const {
@@ -14,6 +15,9 @@ const {
 } = process.env;
 const ENV = NODE_ENV;
 
+const LOCAL = 'local';
+const DEVELOP = 'develop';
+
 const { APP_URL, API_URL } = config[ENV];
 
 module.exports = {
@@ -29,4 +33,6 @@ module.exports = {
   GIT_CLIENT_SECRET,
   FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET,
+  LOCAL,
+  DEVELOP,
 };
