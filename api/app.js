@@ -14,19 +14,20 @@ const errorHandler = require('./middlewares/errorHandler');
 const NotFoundError = require('./constants/errors/notFoundError');
 
 const app = express();
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+if (ENV !== 'test')
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
 
-  // We recommend adjusting this value in production, or using tracesSampler
-  // for finer control
-  tracesSampleRate: 1.0,
-  environment: ENV,
-  integrations: [
-    // enable HTTP calls tracing
-    new Sentry.Integrations.Http({ tracing: true }),
-    new Tracing.Integrations.Express({ app }),
-  ],
-});
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
+    environment: ENV,
+    integrations: [
+      // enable HTTP calls tracing
+      new Sentry.Integrations.Http({ tracing: true }),
+      new Tracing.Integrations.Express({ app }),
+    ],
+  });
 
 app.use(morgan('dev'));
 app.use(
