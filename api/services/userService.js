@@ -17,7 +17,10 @@ const getUserByEmailAndPassword = async (email, password) => {
   return null;
 };
 
+const getUserByEmail = async (email) => UserRepository.getUserByEmail(email);
+
 module.exports = {
+  getUserByEmail,
   createUser,
   getUserByEmailAndPassword,
   getUserById,
