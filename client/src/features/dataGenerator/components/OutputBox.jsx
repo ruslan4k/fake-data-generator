@@ -49,7 +49,7 @@ function OutputBox({ generatedDataRows, columns }) {
   return (
     <div className="mt-20 max-w-full" id="outputBox">
       {isResult && (
-        <Paper elevation={3} classes={{ root: classes.root }}>
+        <Paper data-testid="paper" elevation={3} classes={{ root: classes.root }}>
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>

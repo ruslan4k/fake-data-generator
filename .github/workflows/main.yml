@@ -27,11 +27,19 @@ jobs:
           envkey_API_URL: ${{secrets.API_URL}}
           envkey_APP_URL: ${{secrets.APP_URL}}
           file_name: api/.env
-      - name: Install dependencies
+      - name: Install client dependencies
+        run: npm install
+        shell: bash
+        working-directory: client
+      - name: Run client test cases
+        run: npm run test
+        shell: bash
+        working-directory: client
+      - name: Install api dependencies
         run: npm install
         shell: bash
         working-directory: api
-      - name: Run test cases
+      - name: Run api test cases
         run: npm run test:ci
         shell: bash
         working-directory: api
